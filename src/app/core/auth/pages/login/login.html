@@ -1,0 +1,164 @@
+<main class="min-h-dvh w-full bg-white text-slate-900" aria-labelledby="login-title">
+  <div class="flex min-h-dvh w-full">
+    <section
+      class="flex w-full items-center justify-center bg-white px-6 py-10 sm:px-8 lg:w-[35%] lg:px-10 xl:px-12"
+      aria-label="Formulario de autenticación"
+    >
+      <div class="w-full max-w-[380px]">
+        <div class="mb-10">
+          <div class="mb-7 flex items-center gap-3">
+            <div
+              class="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm"
+              aria-hidden="true"
+            >
+              <mat-icon class="h-6! w-6! text-[24px]!"> location_on </mat-icon>
+            </div>
+
+            <div>
+              <div class="text-lg font-bold tracking-tight text-slate-550">
+                Kerno<span class="text-orange-500">Tracking</span>
+              </div>
+
+              <div class="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                GPS Administrador
+              </div>
+            </div>
+          </div>
+
+          <h1
+            id="login-title"
+            class="text-3xl font-bold tracking-tight text-slate-950 sm:text-[32px]"
+          >
+            Iniciar sesión
+          </h1>
+
+          <p class="mt-3 max-w-[350px] text-sm leading-6 text-slate-500">
+            Ingresa tus credenciales para acceder al sistema de monitoreo.
+          </p>
+        </div>
+
+        @if (loginError(); as error) {
+          <div
+            class="mb-5 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            role="alert"
+            aria-live="polite"
+          >
+            <mat-icon class="mt-0.5 shrink-0 h-5! w-5! text-[20px]!" aria-hidden="true">
+              error_outline
+            </mat-icon>
+
+            <span>
+              {{ error }}
+            </span>
+          </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate class="space-y-1">
+          <mat-form-field appearance="outline" class="w-full mb-3">
+            <mat-label> Nombre de usuario </mat-label>
+
+            <input
+              matInput
+              id="username"
+              type="text"
+              formControlName="username"
+              autocomplete="username"
+              placeholder="Ingresa tu usuario"
+            />
+
+            <mat-icon matPrefix class="mr-2 text-slate-400" aria-hidden="true">
+              person_outline
+            </mat-icon>
+
+            @if (username.hasError('required') && username.touched) {
+              <mat-error> El nombre de usuario es requerido. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label> Contraseña </mat-label>
+
+            <input
+              matInput
+              id="password"
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="Ingresa tu contraseña"
+            />
+
+            <mat-icon matPrefix class="mr-2 text-slate-400" aria-hidden="true">
+              lock_outline
+            </mat-icon>
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+              [attr.aria-pressed]="!hidePassword()"
+            >
+              <mat-icon>
+                {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+
+            @if (password.hasError('required') && password.touched) {
+              <mat-error> La contraseña es requerida. </mat-error>
+            }
+          </mat-form-field>
+
+          <div class="pb-3">
+            <mat-checkbox formControlName="rememberMe">
+              <span class="text-sm text-slate-600"> Recordar mis credenciales </span>
+            </mat-checkbox>
+          </div>
+
+          <button
+            mat-flat-button
+            type="submit"
+            class="h-12! w-full! rounded-lg! text-sm! font-semibold!"
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              <mat-spinner diameter="20" class="mr-2" aria-label="Iniciando sesión" />
+
+              <span> Iniciando sesión... </span>
+            } @else {
+              <span> Iniciar sesión </span>
+            }
+          </button>
+        </form>
+
+        <div class="mt-10 border-t border-slate-100 pt-5">
+          <div class="flex items-center justify-center gap-2">
+            <mat-icon class="h-4! w-4! text-[16px]! text-slate-400" aria-hidden="true">
+              verified_user
+            </mat-icon>
+
+            <span class="text-xs text-slate-400"> Acceso seguro al sistema de monitoreo </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="relative hidden min-h-dvh overflow-hidden bg-slate-950 lg:block lg:w-[65%]"
+      aria-label="Monitoreo GPS de flotas"
+    >
+      <img
+        src="images/background-gps.png"
+        alt="Sistema de monitoreo GPS de vehículos y gestión de flotas"
+        class="absolute inset-0 h-full w-full object-cover object-right"
+      />
+
+      <div class="pointer-events-none absolute inset-0 bg-slate-950/10" aria-hidden="true"></div>
+
+      <div
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/30 to-transparent"
+        aria-hidden="true"
+      ></div>
+    </section>
+  </div>
+</main>
