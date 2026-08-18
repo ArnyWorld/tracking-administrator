@@ -10,6 +10,10 @@ export const USER_ROUTES: Routes = [
     path: 'new',
     loadComponent: () => import('./pages/user-form/user-form').then((m) => m.UserForm),
   },
+  {
+    path: 'company-list',
+    loadComponent: () => import('./pages/company-list/company-list').then((m) => m.CompanyList),
+  },
 
   {
     path: ':id',

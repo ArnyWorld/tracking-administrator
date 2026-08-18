@@ -1,23 +1,32 @@
+export interface AuthUser {
+  exp: number;
+  lat: number;
+  user: User;
+}
+
+export interface User {
+  name: string | null;
+  lastname: string | null;
+  email: string;
+  create_at: number;
+  phone: string | null;
+  username: string;
+  type: string;
+}
 export interface LoginCredentials {
   username: string;
   password: string;
   rememberMe: boolean;
 }
 
-export interface AuthUser {
-  id: string;
-  username: string;
-  name?: string;
-  email?: string;
-  roles?: string[];
-}
-
 export interface LoginResponse {
+  success: boolean;
   token: string;
-  user?: AuthUser;
+  expires: number;
 }
 
-export interface StoredSession {
+export interface AuthSession {
   token: string;
-  user?: AuthUser;
+  expires: number;
+  user: AuthUser;
 }

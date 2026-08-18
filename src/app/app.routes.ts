@@ -29,7 +29,7 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'user',
       },
     ],
   },
@@ -42,6 +42,6 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'app/dashboard',
+    redirectTo: 'user',
   },
 ];

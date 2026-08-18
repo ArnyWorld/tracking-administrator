@@ -1,9 +1,9 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -13,7 +13,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
 
   /*
-   * No agregar Authorization a peticiones sin token.
+   * Si no hay token, la petición continúa
+   * normalmente.
    */
   if (!token) {
     return next(req);
@@ -26,7 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   });
 
   return next(authenticatedRequest).pipe(
-    catchError((error: HttpErrorResponse) => {
+    catchError((error) => {
       if (error.status === 401) {
         authService.clearSession();
 

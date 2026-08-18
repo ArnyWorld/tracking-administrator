@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-
 import { AuthService } from '../services/auth/auth.service';
 
 export const guestGuard: CanActivateFn = () => {
@@ -11,5 +10,5 @@ export const guestGuard: CanActivateFn = () => {
     return true;
   }
 
-  return router.createUrlTree(['/app/dashboard']);
+  return router.createUrlTree(['app/user']);
 };
