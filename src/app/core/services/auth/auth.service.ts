@@ -126,6 +126,8 @@ export class AuthService {
     localStorage.removeItem(this.storageKey);
 
     sessionStorage.removeItem(this.storageKey);
+    sessionStorage.removeItem('tokenUser');
+    sessionStorage.removeItem('typeUser');
   }
 
   private storeSession(session: AuthSession, rememberMe: boolean): void {

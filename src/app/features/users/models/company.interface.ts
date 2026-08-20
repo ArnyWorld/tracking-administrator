@@ -1,5 +1,5 @@
 interface Company {
-  id: number;
+  id: number | string;
   name: string;
   color: string;
   description: string;

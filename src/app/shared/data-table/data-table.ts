@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -14,20 +21,18 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { TemplateRef } from '@angular/core';
-
 export interface DataTableColumn<T> {
   key: keyof T | string;
-
   label: string;
-
   width?: string;
-
   align?: 'left' | 'center' | 'right';
-
   sortable?: boolean;
 
   template?: TemplateRef<DataTableCellContext<T>>;
+
+  typeField?: 'text' | 'number' | 'date' | 'image' | 'color' | 'badge' | 'custom';
+
+  value?: (row: T) => unknown;
 }
 
 export interface DataTableCellContext<T> {
@@ -57,49 +62,56 @@ export interface DataTableAction<T> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableComponent<T> {
-  @Input()
-  data: T[] = [];
+  @Input() data: T[] = [];
 
-  @Input()
-  columns: DataTableColumn<T>[] = [];
+  @Input() columns: DataTableColumn<T>[] = [];
 
-  @Input()
-  loading = false;
+  @Input() loading = false;
 
-  @Input()
-  total = 0;
+  @Input() total = 0;
 
-  @Input()
-  pageIndex = 0;
+  @Input() pageIndex = 0;
 
-  @Input()
-  pageSize = 10;
+  @Input() pageSize = 10;
 
-  @Input()
-  pageSizeOptions: number[] = [10, 25, 50, 100];
+  @Input() pageSizeOptions: number[] = [10, 25, 50, 100];
 
-  @Input()
-  emptyMessage = 'No hay registros para mostrar.';
+  @Input() emptyMessage = 'No hay registros para mostrar.';
 
-  @Input()
-  showPaginator = true;
+  @Input() showPaginator = true;
 
-  @Input()
-  clickableRows = false;
+  @Input() clickableRows = false;
 
-  @Output()
-  pageChange = new EventEmitter<PageEvent>();
+  @Input() showActions = false;
 
-  @Output()
-  rowClick = new EventEmitter<T>();
+  @Input() showEditAction = false;
 
-  @Output()
-  action = new EventEmitter<DataTableAction<T>>();
+  @Input() showDeleteAction = false;
+
+  @Output() pageChange = new EventEmitter<PageEvent>();
+
+  @Output() rowClick = new EventEmitter<T>();
+
+  @Output() action = new EventEmitter<DataTableAction<T>>();
+
+  @Output() edit = new EventEmitter<T>();
+
+  @Output() delete = new EventEmitter<T>();
+
+  @Input() showUserAction = false;
+
+  @Output() userAction = new EventEmitter<T>();
 
   readonly dataSource = new MatTableDataSource<T>();
 
   get displayedColumns(): string[] {
-    return this.columns.map((column) => column.key.toString());
+    const columns = this.columns.map((column) => column.key.toString());
+
+    if (this.showActions && (this.showEditAction || this.showDeleteAction)) {
+      columns.push('actions');
+    }
+
+    return columns;
   }
 
   ngOnChanges(): void {

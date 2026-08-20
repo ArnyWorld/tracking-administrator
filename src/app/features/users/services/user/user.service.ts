@@ -30,7 +30,7 @@ export class UserService {
     sortBy: string = 'id',
     descending: boolean = false,
   ): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.getUrl(), {
+    return this.http.get<ApiResponse>(this.getUrl() + 's', {
       params: {
         page,
         size: pageSize,

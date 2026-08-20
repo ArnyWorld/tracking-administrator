@@ -19,8 +19,8 @@ export class CompanyService {
     this.prefix = prefix;
   }
 
-  register(data: CompanyRequest): Observable<ApiResponse> {
-    const token = localStorage.getItem('tokenUser');
+  register(data: CompanyRequest, token: string): Observable<ApiResponse> {
+    //const token = localStorage.getItem('tokenUser');
 
     if (!token) {
       throw new Error('No existe un token de registro válido.');
@@ -51,5 +51,9 @@ export class CompanyService {
 
   private getUrl(): string {
     return `${this.apiUrl}${this.prefix}/${this.apiName}`;
+  }
+
+  delete(id: string | number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
   }
 }

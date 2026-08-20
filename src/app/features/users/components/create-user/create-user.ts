@@ -99,6 +99,6 @@ export class CreateUserComponent {
   }
 
   cancel(): void {
-    this.router.navigate(['/app/users/list']);
+    this.router.navigate(['/app/user/list']);
   }
 }

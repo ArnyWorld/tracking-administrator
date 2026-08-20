@@ -10,27 +10,24 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const token = authService.getToken();
+  let request = req;
 
-  /*
-   * Si no hay token, la petición continúa
-   * normalmente.
-   */
-  if (!token) {
-    return next(req);
+  if (!req.headers.has('Authorization')) {
+    const token = authService.getToken();
+
+    if (token) {
+      request = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
   }
 
-  const authenticatedRequest = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return next(authenticatedRequest).pipe(
+  return next(request).pipe(
     catchError((error) => {
       if (error.status === 401) {
         authService.clearSession();
-
         void router.navigate(['/auth/login']);
       }
 

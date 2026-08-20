@@ -1,3 +1,34 @@
+<ng-template #logoTemplate let-company>
+  <div class="flex items-center justify-center py-2">
+    @if (company.image) {
+      <img
+        [src]="company.image"
+        [alt]="'Logo ' + company.name"
+        class="h-8 w-8 rounded-lg object-cover"
+      />
+    } @else {
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-slate-400"
+      >
+        <mat-icon>business</mat-icon>
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #colorTemplate let-company>
+  <div class="flex items-center gap-2">
+    <span
+      class="h-6 w-6 rounded border border-slate-200"
+      [style.background-color]="company.color"
+    ></span>
+
+    <span class="text-xs text-slate-500">
+      {{ company.color }}
+    </span>
+  </div>
+</ng-template>
+
 <div class="w-full p-6">
   <div class="mb-6 flex items-center justify-between">
     <div>
@@ -7,13 +38,18 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <button mat-icon-button type="button" aria-label="Recargar empresas" (click)="reload()">
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Recargar empresas"
+        matTooltip="Recargar"
+        (click)="reload()"
+      >
         <mat-icon>refresh</mat-icon>
       </button>
 
       <button mat-flat-button color="primary" routerLink="/app/user/create">
         <mat-icon>add</mat-icon>
-
         Registrar
       </button>
     </div>
@@ -26,6 +62,13 @@
     [total]="total"
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
+    [showActions]="true"
+    [showUserAction]="true"
+    [showEditAction]="true"
+    [showDeleteAction]="true"
+    (userAction)="companyUsers($event)"
+    (edit)="editCompany($event)"
+    (delete)="deleteCompany($event)"
     (pageChange)="onPageChange($event)"
   />
 </div>

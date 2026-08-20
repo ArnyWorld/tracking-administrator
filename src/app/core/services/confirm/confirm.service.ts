@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmOptions } from '../../models/confirmOptions.interface';
 import { ConfirmDialogComponent } from '../../../shared/confirm-modal/confirm-modal';
@@ -7,13 +8,12 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-modal/confirm-mo
   providedIn: 'root',
 })
 export class ConfirmService {
-  private readonly dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
 
   confirm(onOk: () => void | Promise<void>, options?: ConfirmOptions): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
-      maxWidth: 'calc(100vw - 32px)',
-      disableClose: true,
+
       data: {
         title: options?.title ?? '¿Estás seguro?',
 
@@ -27,12 +27,10 @@ export class ConfirmService {
       },
     });
 
-    dialogRef.afterClosed().subscribe(async (confirmed: boolean) => {
-      if (!confirmed) {
-        return;
+    dialogRef.afterClosed().subscribe(async (confirmed) => {
+      if (confirmed) {
+        await onOk();
       }
-
-      await onOk();
     });
   }
 }

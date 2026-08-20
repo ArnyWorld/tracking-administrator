@@ -35,7 +35,7 @@
           @if (usersMenuOpen) {
             <div class="ml-4 mt-1 space-y-1 border-l border-white/10 pl-3">
               <a
-                routerLink="/app/users/create"
+                routerLink="/app/user/create"
                 routerLinkActive="bg-blue-600 text-white"
                 class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
               >
@@ -52,13 +52,23 @@
                   <mat-icon>list</mat-icon>Listar empresas</span
                 >
               </a>
+              <a
+                routerLink="/app/user/user-list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar usuarios</span
+                >
+              </a>
             </div>
           }
         </div>
 
         <a
-          routerLink="/user/monitoring"
-          routerLinkActive="bg-blue-600 text-white"
+          href="http://172.21.11.28:4203/dashboard/live-gps"
+          target="_blank"
           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
         >
           <mat-icon>location_on</mat-icon>

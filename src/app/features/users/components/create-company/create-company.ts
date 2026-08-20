@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, output } from '@angular/core';
 
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -35,7 +35,7 @@ import { CompanyService } from '../../services/company/company.service';
   templateUrl: './create-company.html',
   styleUrl: './create-company.css',
 })
-export default class CreateCompanyComponent implements OnInit {
+export default class CreateCompanyComponent implements OnInit, AfterViewInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
 
@@ -60,10 +60,11 @@ export default class CreateCompanyComponent implements OnInit {
   constructor() {
     this.addCompany();
   }
-
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.type = localStorage.getItem('typeUser') ?? 'personal';
   }
+
+  ngOnInit(): void {}
 
   get companies(): FormArray<FormGroup> {
     return this.companyForm.controls.companies;
@@ -151,7 +152,7 @@ export default class CreateCompanyComponent implements OnInit {
 
   private saveCompanies(): void {
     const tokenUser = localStorage.getItem('tokenUser');
-
+    console.log('tokenUser ', tokenUser);
     if (!tokenUser) {
       this.uiUtils.error('No existe un usuario registrado.');
 
@@ -161,7 +162,7 @@ export default class CreateCompanyComponent implements OnInit {
     this.isLoading = true;
 
     const requests = this.companies.controls.map((company) =>
-      this.companyService.register(company.getRawValue()).pipe(
+      this.companyService.register(company.getRawValue(), tokenUser).pipe(
         catchError(() =>
           of({
             error: true,
