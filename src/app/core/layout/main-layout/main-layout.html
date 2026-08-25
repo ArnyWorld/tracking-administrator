@@ -65,6 +65,46 @@
             </div>
           }
         </div>
+        <div>
+          <button
+            type="button"
+            (click)="usersMenuOpen2 = !usersMenuOpen2"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <mat-icon>smartphone</mat-icon>
+
+            <span class="flex-1">Dispositivos</span>
+
+            <mat-icon class="transition-transform duration-200" [class.rotate-180]="usersMenuOpen">
+              expand_more
+            </mat-icon>
+          </button>
+
+          @if (usersMenuOpen2) {
+            <div class="ml-4 mt-1 space-y-1 border-l border-white/10 pl-3">
+              <a
+                routerLink="/app/assignment/create"
+                routerLinkActive="bg-blue-600 text-white"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2"
+                  ><mat-icon>add</mat-icon> Crear Asignación</span
+                >
+              </a>
+
+              <a
+                routerLink="/app/assignment/assignment-list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar Asignaciones</span
+                >
+              </a>
+            </div>
+          }
+        </div>
 
         <a
           href="http://172.21.11.28:4203/dashboard/live-gps"

@@ -25,6 +25,11 @@ export const routes: Routes = [
         path: 'user',
         loadChildren: () => import('./features/users/user.routes').then((m) => m.USER_ROUTES),
       },
+      {
+        path: 'assignment',
+        loadChildren: () =>
+          import('./features/devices/devices.routes').then((m) => m.ASSIGNMENT_ROUTES),
+      },
 
       {
         path: '',
