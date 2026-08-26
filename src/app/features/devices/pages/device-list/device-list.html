@@ -1,0 +1,164 @@
+<div class="min-h-screen w-full bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl">
+    <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div
+        class="flex flex-col gap-4 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div>
+          <h2 class="text-xl font-semibold text-slate-800">Lista de dispositivos</h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Gestiona y monitorea los dispositivos de su empresa.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            mat-icon-button
+            type="button"
+            matTooltip="Recargar"
+            aria-label="Recargar dispositivos"
+            (click)="reload()"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            type="button"
+            matTooltip="Filtrar"
+            aria-label="Filtrar dispositivos"
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
+
+          <button mat-flat-button color="primary" type="button" (click)="createDevice()">
+            <mat-icon>add</mat-icon>
+            <span class="hidden sm:inline"> Registrar </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="px-2 sm:px-4">
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="flex items-center gap-2">
+                <span> Vehículos </span>
+
+                <span
+                  class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
+                >
+                  {{ vehicles().length }}
+                </span>
+              </div>
+            </ng-template>
+
+            <div class="py-4">
+              <app-data-table
+                [data]="vehicles()"
+                [columns]="columns"
+                [loading]="isLoading()"
+                [total]="vehicles().length"
+                [pageIndex]="pageIndex"
+                [pageSize]="pageSize"
+                [showActions]="true"
+                [showEditAction]="true"
+                [showDeleteAction]="true"
+                (edit)="editDevice($event)"
+                (delete)="deleteDevice($event)"
+                (pageChange)="onPageChange($event)"
+              />
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="flex items-center gap-2">
+                <span> App </span>
+
+                <span
+                  class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
+                >
+                  {{ apps().length }}
+                </span>
+              </div>
+            </ng-template>
+
+            <div class="py-4">
+              <app-data-table
+                [data]="apps()"
+                [columns]="columns"
+                [loading]="isLoading()"
+                [total]="apps().length"
+                [pageIndex]="pageIndex"
+                [pageSize]="pageSize"
+                [showActions]="true"
+                [showEditAction]="true"
+                [showDeleteAction]="true"
+                (edit)="editDevice($event)"
+                (delete)="deleteDevice($event)"
+                (pageChange)="onPageChange($event)"
+              />
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- TEMPLATES DEL DATATABLE -->
+<!-- ========================================================= -->
+
+<ng-template #brandTemplate let-device>
+  <div class="flex items-center gap-2">
+    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100">
+      <mat-icon class="text-slate-500"> memory </mat-icon>
+    </div>
+
+    <span class="font-medium text-slate-700">
+      {{ device.brand || 'Sin marca' }}
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #modelTemplate let-device>
+  @if (device.model) {
+    <span class="text-slate-600">
+      {{ device.model }}
+    </span>
+  } @else {
+    <span class="text-xs text-slate-400"> Sin modelo </span>
+  }
+</ng-template>
+
+<ng-template #imeiTemplate let-device>
+  @if (device.imei) {
+    <span class="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs text-slate-600">
+      {{ device.imei }}
+    </span>
+  } @else {
+    <span class="text-xs text-slate-400"> No disponible </span>
+  }
+</ng-template>
+
+<ng-template #deviceTemplate let-device>
+  @if (device.device) {
+    <span class="text-slate-600">
+      {{ device.device }}
+    </span>
+  } @else {
+    <span class="text-xs text-slate-400"> Sin información </span>
+  }
+</ng-template>
+
+<ng-template #gpsspecTemplate let-device>
+  @if (device.gpsspec) {
+    <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
+      {{ device.gpsspec }}
+    </span>
+  } @else {
+    <span class="text-xs text-slate-400"> Sin especificación </span>
+  }
+</ng-template>

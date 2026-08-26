@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const ASSIGNMENT_ROUTES: Routes = [
+export const DEVICE_ROUTES: Routes = [
   /* {
     path: '',
     loadComponent: () => import('./pages/user-form/user-form').then((m) => m.UserForm),
@@ -8,10 +8,14 @@ export const ASSIGNMENT_ROUTES: Routes = [
 
   {
     path: 'create',
-    loadComponent: () => import('./pages/assignment-form/device-form').then((m) => m.DeviceForm),
+    loadComponent: () => import('./pages/device-form/device-form').then((m) => m.DeviceForm),
+  },
+  {
+    path: 'list',
+    loadComponent: () => import('./pages/device-list/device-list').then((m) => m.DeviceList),
   },
   {
     path: ':id',
-    loadComponent: () => import('./pages/assignment-form/device-form').then((m) => m.DeviceForm),
+    loadComponent: () => import('./pages/device-form/device-form').then((m) => m.DeviceForm),
   },
 ];

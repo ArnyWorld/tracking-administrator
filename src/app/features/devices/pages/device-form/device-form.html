@@ -1,0 +1,203 @@
+<div class="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto w-full max-w-5xl">
+    <form [formGroup]="formDevice" class="relative">
+      <div class="mb-6">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="mb-1 text-xs font-medium uppercase tracking-wide text-slate-400">
+              Dispositivos
+            </p>
+
+            <h2 class="text-2xl font-semibold text-slate-800">{{ action }} dispositivo</h2>
+
+            <p class="mt-1 text-sm text-slate-500">
+              Complete los campos obligatorios para dar de alta un nuevo dispositivo.
+            </p>
+          </div>
+
+          <span
+            class="hidden rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500 sm:inline-flex"
+          >
+            (*) Campo obligatorio
+          </span>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-5 py-4 sm:px-6">
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary"
+            >
+              <mat-icon>devices</mat-icon>
+            </div>
+
+            <div>
+              <h3 class="text-base font-semibold text-slate-800">Información del dispositivo</h3>
+
+              <p class="text-xs text-slate-500">
+                Seleccione el dispositivo y sus especificaciones.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Dispositivo conectado</mat-label>
+
+            <mat-select formControlName="id">
+              <div
+                class="sticky top-0 z-10 border-b border-slate-200 bg-white p-2"
+                (click)="$event.stopPropagation()"
+              >
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-icon matPrefix> search </mat-icon>
+
+                  <input
+                    matInput
+                    placeholder="Buscar por IMEI..."
+                    #deviceSearch
+                    (input)="onSearch(deviceSearch.value)"
+                    (keydown)="$event.stopPropagation()"
+                  />
+
+                  @if (isLoadingDevices()) {
+                    <mat-spinner matSuffix diameter="18" />
+                  }
+                </mat-form-field>
+              </div>
+
+              @for (device of arrayDevices; track device.id) {
+                <mat-option [value]="device.id">
+                  <div class="flex flex-col py-1">
+                    <span class="font-medium text-slate-700">
+                      {{ device.brand || 'Sin marca' }}
+                    </span>
+
+                    <span class="text-xs text-slate-500"> IMEI: {{ device.imei }} </span>
+                  </div>
+                </mat-option>
+              }
+
+              @if (!isLoadingDevices() && arrayDevices.length === 0) {
+                <mat-option disabled> No se encontraron dispositivos </mat-option>
+              }
+            </mat-select>
+
+            <mat-hint> Ingrese al menos 4 caracteres del IMEI. </mat-hint>
+
+            @if (formDevice.get('id')?.hasError('required') && formDevice.get('id')?.touched) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full input-device">
+            <mat-label>Especificaciones</mat-label>
+
+            <mat-select formControlName="gpsspec_id">
+              @if (isLoadingSpecs()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" />
+
+                    <span> Cargando especificaciones... </span>
+                  </div>
+                </mat-option>
+              }
+
+              @for (gps of arrayGpsspecs; track gps.id) {
+                <mat-option [value]="gps.id">
+                  {{ gps.name }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (
+              formDevice.get('gpsspec_id')?.hasError('required') &&
+              formDevice.get('gpsspec_id')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Marca</mat-label>
+
+            <input matInput type="text" formControlName="info_brand" />
+
+            <mat-icon matPrefix> business </mat-icon>
+
+            @if (
+              formDevice.get('info_brand')?.hasError('required') &&
+              formDevice.get('info_brand')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Modelo</mat-label>
+
+            <input matInput type="text" formControlName="info_model" />
+
+            <mat-icon matPrefix> memory </mat-icon>
+
+            @if (
+              formDevice.get('info_model')?.hasError('required') &&
+              formDevice.get('info_model')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>IMEI</mat-label>
+
+            <input matInput type="text" formControlName="imei" readonly />
+
+            <mat-icon matPrefix> qr_code </mat-icon>
+
+            <mat-hint> Se obtiene automáticamente del dispositivo. </mat-hint>
+
+            @if (formDevice.get('imei')?.hasError('required') && formDevice.get('imei')?.touched) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Número de SIM</mat-label>
+
+            <input matInput type="text" formControlName="phone_number" />
+
+            <mat-icon matPrefix> sim_card </mat-icon>
+
+            @if (
+              formDevice.get('phone_number')?.hasError('required') &&
+              formDevice.get('phone_number')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button mat-stroked-button type="button" (click)="cancel()" class="w-full sm:w-auto">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="showConfirm()"
+          class="w-full sm:w-auto"
+        >
+          <mat-icon>save</mat-icon>
+          Registrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

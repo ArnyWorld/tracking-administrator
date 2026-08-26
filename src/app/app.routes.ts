@@ -28,7 +28,12 @@ export const routes: Routes = [
       {
         path: 'assignment',
         loadChildren: () =>
-          import('./features/devices/devices.routes').then((m) => m.ASSIGNMENT_ROUTES),
+          import('./features/devices/assignment.routes').then((m) => m.ASSIGNMENT_ROUTES),
+      },
+      {
+        path: 'device',
+        loadChildren: () =>
+          import('./features/devices/devices.routes').then((m) => m.DEVICE_ROUTES),
       },
 
       {

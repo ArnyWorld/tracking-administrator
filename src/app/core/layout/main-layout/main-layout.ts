@@ -25,8 +25,9 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class MainLayout {
   private readonly authService = inject(AuthService);
-  usersMenuOpen = true;
-  usersMenuOpen2 = true;
+  usersMenuOpen: boolean = true;
+  usersMenuOpen2: boolean = true;
+  usersMenuOpen3: boolean = true;
   readonly currentUser = this.authService.getCurrentUser();
 
   logout(): void {

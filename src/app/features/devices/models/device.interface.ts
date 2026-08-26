@@ -1,3 +1,5 @@
+import { Vehicle } from './vehicle.interface';
+
 export interface GpsSpec {
   id: string;
   name: string;
@@ -32,13 +34,16 @@ export interface Device {
   registred_date: string | null;
   last_connect: string | null;
   first_connect: string | null;
+  brand?: string;
+  model?: string;
+  device?: string;
 
-  imei: number | null;
+  imei: number | string | null;
   phone_number: number | null;
   timezone: string | null;
 
   gpsspec_id: string | null;
-  gpsspec: GpsSpec | null;
+  gpsspec: string | GpsSpec | null;
 }
 
 export interface Pagination {
@@ -53,6 +58,18 @@ export interface CreateDeviceRequest {
   observations: string;
   create_date: string;
   install_date: string;
+}
+
+export interface AssignmentResponse {
+  id: string;
+  vehicle_id: string;
+  device_id: string;
+  observations: string;
+  create_date: number;
+  install_date: number;
+  vehicle: Vehicle;
+  sensors: unknown[];
+  device: Device;
 }
 
 export interface PaginatedResponse<T> {

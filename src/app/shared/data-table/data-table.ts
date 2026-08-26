@@ -28,7 +28,7 @@ export interface DataTableColumn<T> {
   align?: 'left' | 'center' | 'right';
   sortable?: boolean;
 
-  template?: TemplateRef<DataTableCellContext<T>>;
+  template?: TemplateRef<DataTableCellContext<T>> | any;
 
   typeField?: 'text' | 'number' | 'date' | 'image' | 'color' | 'badge' | 'custom';
 
