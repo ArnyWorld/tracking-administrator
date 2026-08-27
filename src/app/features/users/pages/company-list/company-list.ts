@@ -160,7 +160,7 @@ export class CompanyList implements AfterViewInit {
     });
   }
   companyUsers(company: Company): void {
-    this.router.navigate(['/app/user/create'], {
+    this.router.navigate(['/app/user/create-user-enterprise'], {
       queryParams: {
         companyId: company.id,
       },
