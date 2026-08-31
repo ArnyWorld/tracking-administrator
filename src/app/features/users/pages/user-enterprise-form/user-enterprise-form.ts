@@ -44,11 +44,10 @@ export class UserEnterpriseForm {
     password: [null, Validators.required],
     firstname: [null, Validators.required],
     lastname: [null, Validators.required],
-    create_at: [Date.now(), [Validators.required, Validators.email]],
-    update_at: [Date.now(), [Validators.required, Validators.email]],
+    create_at: [Date.now(), [Validators.required]],
+    update_at: [Date.now(), [Validators.required]],
     email: [null, [Validators.required, Validators.email]],
     state_id: [null, [Validators.required]],
-    user_type_id: ['', [Validators.required]],
     phone: [null],
   });
   hidePassword = true;

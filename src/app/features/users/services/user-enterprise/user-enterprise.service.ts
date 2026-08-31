@@ -38,6 +38,6 @@ export class UserEnterpriseService {
   }
 
   private getUrl(): string {
-    return `${this.apiUrl}${this.prefix}/${this.apiUrl}`;
+    return `${this.apiUrl}${this.prefix}`;
   }
 }

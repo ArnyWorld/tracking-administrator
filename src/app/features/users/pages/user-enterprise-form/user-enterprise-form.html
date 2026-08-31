@@ -80,7 +80,8 @@
               }
             </mat-form-field>
           </div>
-
+        </div>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Contraseña</mat-label>
 
@@ -109,28 +110,11 @@
               <mat-error>Este campo es obligatorio.</mat-error>
             }
           </mat-form-field>
-        </div>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Rol</mat-label>
-
-            <mat-select formControlName="user_type_id">
-              <mat-option value="admin">Administrador</mat-option>
-              <mat-option value="user">Usuario</mat-option>
-              <mat-option value="supervisor">Supervisor</mat-option>
-            </mat-select>
-
-            @if (formUser.controls.user_type_id.hasError('required')) {
-              <mat-error>Este campo es obligatorio.</mat-error>
-            }
-          </mat-form-field>
-
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Estado</mat-label>
-
             <mat-select formControlName="state_id">
-              <mat-option value="active">Activo</mat-option>
-              <mat-option value="inactive">Inactivo</mat-option>
+              <mat-option value="1">Activo</mat-option>
+              <mat-option value="2">Inactivo</mat-option>
             </mat-select>
 
             @if (formUser.controls.state_id.hasError('required')) {
