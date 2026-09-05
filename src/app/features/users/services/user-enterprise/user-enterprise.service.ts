@@ -17,8 +17,8 @@ export class UserEnterpriseService {
     this.prefix = prefix;
   }
 
-  register(data: UserByEnterpriseRequest | any): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${this.getUrl()}/${this.db}/users`, data);
+  register(data: UserByEnterpriseRequest | any, uri: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.getUrl()}/${uri}/users`, data);
   }
 
   getAllPaginate(

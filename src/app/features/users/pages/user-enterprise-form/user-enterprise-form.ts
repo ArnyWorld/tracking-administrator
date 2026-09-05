@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmService } from '../../../../core/services/confirm/confirm.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UiUtilsService } from '../../../../core/services/utils/ui-utils.service';
 import { UserEnterpriseService } from '../../services/user-enterprise/user-enterprise.service';
 import { MatOptionModule } from '@angular/material/core';
@@ -36,6 +36,9 @@ export class UserEnterpriseForm {
 
   private readonly userEnterpriseService = inject(UserEnterpriseService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
+  uri = this.activatedRoute.snapshot.queryParamMap.get('companyDb') || '';
 
   readonly completed = output<void>();
 
@@ -69,7 +72,7 @@ export class UserEnterpriseForm {
 
     const user = this.formUser.getRawValue();
 
-    this.userEnterpriseService.register(user).subscribe({
+    this.userEnterpriseService.register(user, this.uri).subscribe({
       next: (data: any) => {
         this.isLoading = false;
 

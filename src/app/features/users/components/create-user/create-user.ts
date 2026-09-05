@@ -9,7 +9,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UiUtilsService } from '../../../../core/services/utils/ui-utils.service';
 import { UserService } from '../../services/user/user.service';
 import { ConfirmService } from '../../../../core/services/confirm/confirm.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-create-user',
@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
     MatRadioModule,
     MatIconModule,
     MatSnackBarModule,
+    RouterLink,
   ],
   templateUrl: './create-user.html',
   styleUrl: './create-user.css',

@@ -20,7 +20,7 @@ export const USER_ROUTES: Routes = [
     loadComponent: () => import('./pages/company-list/company-list').then((m) => m.CompanyList),
   },
   {
-    path: 'user-list',
+    path: 'list',
     loadComponent: () => import('./pages/user-list/user-list').then((m) => m.UserList),
   },
 

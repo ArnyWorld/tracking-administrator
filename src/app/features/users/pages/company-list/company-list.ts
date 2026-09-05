@@ -19,6 +19,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DataTableComponent } from '../../../../shared/data-table/data-table';
 
 import { ConfirmService } from '../../../../core/services/confirm/confirm.service';
+import { Company } from '../../models/company.interface';
 
 @Component({
   selector: 'app-company-list',
@@ -163,6 +164,7 @@ export class CompanyList implements AfterViewInit {
     this.router.navigate(['/app/user/create-user-enterprise'], {
       queryParams: {
         companyId: company.id,
+        companyDb: company?.database?.codename,
       },
     });
   }

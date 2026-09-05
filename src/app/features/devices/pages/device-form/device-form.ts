@@ -167,7 +167,7 @@ export class DeviceForm implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/list-devices']);
+    this.router.navigate(['/app/assignment/list']);
   }
 
   showConfirm(): void {
