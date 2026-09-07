@@ -178,6 +178,39 @@
               <mat-error> Este campo es obligatorio. </mat-error>
             }
           </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Zona Horaria</mat-label>
+
+            <input matInput type="text" formControlName="timezone" />
+
+            <mat-icon matPrefix> av_timer </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full input-device">
+            <mat-label>Tipo de Envío de datos</mat-label>
+
+            <mat-select formControlName="sendtype">
+              <mat-option value="time"> Tiempo </mat-option>
+              <mat-option value="distance"> Distancia </mat-option>
+            </mat-select>
+          </mat-form-field>
+          @if (formDevice.get('sendtype')?.value == 'time') {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Tiempo (Segundos)</mat-label>
+
+              <input matInput type="text" formControlName="sendtime" />
+
+              <mat-icon matPrefix> browse_gallery </mat-icon>
+            </mat-form-field>
+          }
+          @if (formDevice.get('sendtype')?.value == 'distance') {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Distancia (metros)</mat-label>
+
+              <input matInput type="text" formControlName="senddistance" />
+
+              <mat-icon matPrefix> pin_road_2 </mat-icon>
+            </mat-form-field>
+          }
         </div>
       </div>
 

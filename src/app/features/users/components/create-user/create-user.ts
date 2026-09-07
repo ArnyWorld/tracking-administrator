@@ -21,7 +21,6 @@ import { Router, RouterLink } from '@angular/router';
     MatRadioModule,
     MatIconModule,
     MatSnackBarModule,
-    RouterLink,
   ],
   templateUrl: './create-user.html',
   styleUrl: './create-user.css',

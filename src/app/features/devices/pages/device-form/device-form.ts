@@ -60,9 +60,12 @@ export class DeviceForm implements OnInit {
       info_model: [null, Validators.required],
       imei: [null, Validators.required],
       phone_number: [null, Validators.required],
+      timezone: [0, Validators.required],
       gpsspec_id: [null, Validators.required],
       id: [null, Validators.required],
-
+      sendtype: [null],
+      sendtime: [null],
+      senddistance: [null],
       registred: [true],
       registred_date: [new Date()],
     });
