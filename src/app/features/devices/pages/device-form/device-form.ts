@@ -16,6 +16,8 @@ import { debounceTime, distinctUntilChanged, filter, Subject, switchMap, tap } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GpsSensorService } from '../../services/gps-sensor/gps-sensor.service';
 import { GpsspecsService } from '../../services/gpsspecs/gpsspecs.service.service';
+import { DatabasesService } from '../../services/databases/databases.service';
+import { CompanyService } from '../../../users/services/company/company.service';
 
 @Component({
   selector: 'app-device-form',
@@ -41,18 +43,20 @@ export class DeviceForm implements OnInit {
   private router = inject(Router);
   private confirmService = inject(ConfirmService);
   private destroyRef = inject(DestroyRef);
-
+  private dbService = inject(DatabasesService);
   private searchDevice$ = new Subject<string>();
-
+  private enterpriseService = inject(CompanyService);
   formDevice: FormGroup;
-
+  dbArray: any;
   action = 'Registro de';
 
   arrayGpsspecs: any[] = [];
   arrayDevices: any[] = [];
-
+  arrayEnterprises: any[] = [];
   isLoadingSpecs = signal(false);
   isLoadingDevices = signal(false);
+  isLoadingDatabases = signal(false);
+  isLoadingEnterprises = signal(false);
 
   constructor() {
     this.formDevice = this.fb.group({
@@ -68,6 +72,7 @@ export class DeviceForm implements OnInit {
       senddistance: [null],
       registred: [true],
       registred_date: [new Date()],
+      enterprise_id: [null, Validators.required],
     });
 
     this.getGpsSpecs();
@@ -76,7 +81,37 @@ export class DeviceForm implements OnInit {
   ngOnInit(): void {
     this.configureDeviceSearch();
     this.onChangeDeviceId();
+    this.loadEnterprises();
   }
+
+  private loadDatabases = () => {
+    this.isLoadingDatabases.set(true);
+    this.dbService.getAll().subscribe({
+      next: (data) => {
+        this.dbArray = this.utilsService.getResponseGeneral(data) ?? [];
+        this.isLoadingDatabases.set(false);
+        console.log(this.dbArray);
+      },
+      error: () => {
+        this.messageService.error('No se pudieron recuperar las bases de datos.');
+        this.isLoadingDatabases.set(false);
+      },
+    });
+  };
+  private loadEnterprises = () => {
+    this.isLoadingEnterprises.set(true);
+    this.dbService.getAll().subscribe({
+      next: (data) => {
+        this.arrayEnterprises = this.utilsService.getResponseGeneral(data) ?? [];
+        this.isLoadingEnterprises.set(false);
+        console.log(this.arrayEnterprises);
+      },
+      error: () => {
+        this.messageService.error('No se pudieron recuperar las bases de datos.');
+        this.isLoadingEnterprises.set(false);
+      },
+    });
+  };
 
   private configureDeviceSearch(): void {
     this.searchDevice$
@@ -199,6 +234,28 @@ export class DeviceForm implements OnInit {
     );
   }
 
+  private saveDeviceInEnterprise = (data: any) => {
+    this.enterpriseService
+      .registerDeviceInEnterprise({
+        device_id: data?.id,
+        enterprise_id: this.formDevice.value.enterprise_id,
+      })
+      .subscribe({
+        next: (res) => {
+          this.messageService.success(
+            'Se registró correctamente el dispositivo en la empresa seleccionada.',
+          );
+          console.log('saved device in enterprise: ', res);
+
+          this.router.navigate(['/app/device/list']);
+        },
+
+        error: () => {
+          this.messageService.error('No se pudo registrar el dispositivo en la empresa.');
+        },
+      });
+  };
+
   private saveDevice(): void {
     if (this.formDevice.invalid) {
       this.formDevice.markAllAsTouched();
@@ -206,10 +263,10 @@ export class DeviceForm implements OnInit {
     }
 
     this.deviceService.register(this.formDevice.value).subscribe({
-      next: () => {
+      next: (data) => {
         this.messageService.success('Se registró correctamente el dispositivo.');
-
-        this.router.navigate(['/list-devices']);
+        console.log('saved device: ', data);
+        this.saveDeviceInEnterprise(data?.content);
       },
 
       error: () => {

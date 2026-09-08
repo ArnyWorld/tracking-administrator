@@ -12,6 +12,7 @@ export class CompanyService {
   private readonly apiUrl = environment.apiUrlGateway;
 
   private readonly apiName = 'adminmanager/user/enterprises';
+  private readonly apiName2 = 'adminmanager/enterprise_devices';
 
   private prefix = '';
 
@@ -33,6 +34,10 @@ export class CompanyService {
     });
   }
 
+  registerDeviceInEnterprise(data: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.getUrl2(), data);
+  }
+
   getAllPaginate(
     page: number,
     pageSize: number,
@@ -51,6 +56,9 @@ export class CompanyService {
 
   private getUrl(): string {
     return `${this.apiUrl}${this.prefix}/${this.apiName}`;
+  }
+  private getUrl2(): string {
+    return `${this.apiUrl}${this.prefix}/${this.apiName2}`;
   }
 
   delete(id: string | number): Observable<ApiResponse> {

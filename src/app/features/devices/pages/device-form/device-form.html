@@ -42,6 +42,34 @@
         </div>
 
         <div class="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
+          <mat-form-field appearance="outline" class="w-full input-device">
+            <mat-label>Empresa</mat-label>
+
+            <mat-select formControlName="enterprise_id">
+              @if (isLoadingEnterprises()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" />
+
+                    <span> Cargando base de datos... </span>
+                  </div>
+                </mat-option>
+              }
+
+              @for (db of arrayEnterprises; track db.id) {
+                <mat-option [value]="db.id">
+                  {{ db.codename }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (
+              formDevice.get('enterprise_id')?.hasError('required') &&
+              formDevice.get('enterprise_id')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Dispositivo conectado</mat-label>
 
