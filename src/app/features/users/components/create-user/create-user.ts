@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +33,7 @@ export class CreateUserComponent {
   private router = inject(Router);
 
   readonly completed = output<void>();
-
+  hidePassword = signal(true);
   readonly formUser = this.fb.nonNullable.group({
     name: ['', Validators.required],
     lastname: ['', Validators.required],
@@ -47,6 +47,10 @@ export class CreateUserComponent {
   action = 'Registro de';
 
   isLoading = false;
+
+  togglePasswordVisibility(): void {
+    this.hidePassword.update((value) => !value);
+  }
 
   saveUser(): void {
     if (this.formUser.invalid) {
@@ -63,7 +67,8 @@ export class CreateUserComponent {
 
     this.userService.register(user).subscribe({
       next: (data: any) => {
-        localStorage.setItem('tokenUser', data?.token);
+        console.log('response created user', data);
+        localStorage.setItem('tokenUser', data?.token[0]);
 
         localStorage.setItem('typeUser', user.type);
 

@@ -96,13 +96,25 @@
 
             <input
               matInput
-              type="password"
+              [type]="hidePassword() ? 'password' : 'text'"
               formControlName="password"
               autocomplete="new-password"
             />
 
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            >
+              <mat-icon>
+                {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
+            </button>
+
             @if (formUser.controls.password.hasError('required')) {
-              <mat-error> Este campo es obligatorio. </mat-error>
+              <mat-error>Este campo es obligatorio.</mat-error>
             }
           </mat-form-field>
         </div>

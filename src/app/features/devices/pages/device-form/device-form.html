@@ -58,7 +58,7 @@
 
               @for (db of arrayEnterprises; track db.id) {
                 <mat-option [value]="db.id">
-                  {{ db.codename }}
+                  {{ db.name }}
                 </mat-option>
               }
             </mat-select>
@@ -107,7 +107,7 @@
                 </mat-option>
               }
 
-              @if (!isLoadingDevices() && arrayDevices.length === 0) {
+              @if (!isLoadingDevices() && arrayDevices?.length === 0) {
                 <mat-option disabled> No se encontraron dispositivos </mat-option>
               }
             </mat-select>

@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GpsSensorService } from '../../services/gps-sensor/gps-sensor.service';
 import { GpsspecsService } from '../../services/gpsspecs/gpsspecs.service.service';
 import { DatabasesService } from '../../services/databases/databases.service';
+import { CompanyService as CompanyByUserService } from '../../services/company/company.service';
 import { CompanyService } from '../../../users/services/company/company.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class DeviceForm implements OnInit {
   private deviceService = inject(DeviceService);
   private utilsService = inject(UtilsService);
   private messageService = inject(UiUtilsService);
+  private companyService = inject(CompanyByUserService);
   private router = inject(Router);
   private confirmService = inject(ConfirmService);
   private destroyRef = inject(DestroyRef);
@@ -100,7 +102,7 @@ export class DeviceForm implements OnInit {
   };
   private loadEnterprises = () => {
     this.isLoadingEnterprises.set(true);
-    this.dbService.getAll().subscribe({
+    this.companyService.getAll().subscribe({
       next: (data) => {
         this.arrayEnterprises = this.utilsService.getResponseGeneral(data) ?? [];
         this.isLoadingEnterprises.set(false);
