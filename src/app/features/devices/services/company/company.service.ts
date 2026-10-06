@@ -11,7 +11,7 @@ export class CompanyService {
 
   private readonly apiUrl = environment.apiUrlGateway;
 
-  private readonly apiName = 'adminmanager/user/enterprises';
+  private readonly apiName = 'adminmanager/enterprises';
 
   private prefix = '';
 
