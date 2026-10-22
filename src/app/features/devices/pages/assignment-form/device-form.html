@@ -25,39 +25,45 @@
         </div>
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Vehículo</mat-label>
+          <mat-form-field appearance="outline" class="w-full input-device">
+            <mat-label>Empresa</mat-label>
+            <mat-select formControlName="enterprise_id">
+              @if (isLoadingEnterprises()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" />
+                    <span> Cargando base de datos... </span>
+                  </div>
+                </mat-option>
+              }
+              @for (db of enterprises(); track db.id) {
+                <mat-option [value]="db">
+                  {{ db.name }}
+                </mat-option>
+              }
+            </mat-select>
 
+            @if (
+              formAssignment.get('enterprise_id')?.hasError('required') &&
+              formAssignment.get('enterprise_id')?.touched
+            ) {
+              <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- <mat-form-field class="bg-transparent!">
+            <mat-label>Vehículos</mat-label>
             <mat-select formControlName="vehicle_id">
-              <div class="sticky top-0 z-10 bg-white px-3 py-2" (click)="$event.stopPropagation()">
-                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-                  <mat-label>Buscar vehículo</mat-label>
-
-                  <input
-                    matInput
-                    type="text"
-                    [value]="vehicleSearch()"
-                    (input)="onVehicleSearch($event)"
-                    placeholder="Nombre, marca o modelo"
-                    autocomplete="off"
-                  />
-
-                  @if (vehicleSearch()) {
-                    <button
-                      mat-icon-button
-                      matSuffix
-                      type="button"
-                      aria-label="Limpiar búsqueda"
-                      (click)="clearVehicleSearch()"
-                    >
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  }
-                </mat-form-field>
-              </div>
-
-              @for (vehicle of filteredVehicles(); track vehicle.id) {
-                <mat-option [value]="vehicle" [disabled]="vehicle.device?.length > 0">
+              @if (isLoadingVehicles()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" />
+                    <span> Cargando vehículos... </span>
+                  </div>
+                </mat-option>
+              }
+              @for (vehicle of arrayVehicles; track vehicle.id) {
+                <mat-option [value]="vehicle.id" [disabled]="vehicle.device?.length > 0">
                   <div class="flex flex-col py-1">
                     <span class="font-medium">
                       {{ vehicle.name }}
@@ -70,65 +76,131 @@
                   </div>
                 </mat-option>
               }
-
-              @if (filteredVehicles().length === 0) {
-                <mat-option disabled> No se encontraron vehículos </mat-option>
-              }
             </mat-select>
-
             @if (
               formAssignment.get('vehicle_id')?.invalid && formAssignment.get('vehicle_id')?.touched
             ) {
               <mat-error> Este campo es obligatorio. </mat-error>
             }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Dispositivo</mat-label>
-
-            <mat-select formControlName="device_id">
-              <div class="sticky top-0 z-10 bg-white px-3 py-2" (click)="$event.stopPropagation()">
-                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-                  <mat-label>Buscar dispositivo</mat-label>
-
-                  <input
-                    matInput
-                    type="text"
-                    [value]="deviceSearch()"
-                    (input)="onDeviceSearch($event)"
-                    placeholder="Nombre o IMEI"
-                    autocomplete="off"
-                  />
-
-                  @if (deviceSearch()) {
-                    <button
-                      mat-icon-button
-                      matSuffix
-                      type="button"
-                      aria-label="Limpiar búsqueda"
-                      (click)="clearDeviceSearch()"
-                    >
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  }
-                </mat-form-field>
+          </mat-form-field> -->
+          <mat-form-field class="bg-transparent!">
+            <mat-label>Vehículos</mat-label>
+            <mat-select
+              formControlName="vehicle_id"
+              (openedChange)="onPanelToggle($event, 'vehicle')"
+            >
+              <div class="sticky top-0 z-10 border-b border-slate-200 bg-white p-2">
+                <input
+                  #vehicleSearchInput
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Buscar por nombre, marca o modelo…"
+                  class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-primary-500"
+                  [value]="vehicleSearch()"
+                  (input)="vehicleSearch.set($any($event.target).value)"
+                  (keydown)="$event.stopPropagation()"
+                />
               </div>
 
-              @for (device of filteredDevices(); track device.id) {
-                <mat-option [value]="device">
-                  {{ getNameAndImei(device) }}
+              @if (isLoadingVehicles()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" /> <span>Cargando vehículos...</span>
+                  </div>
                 </mat-option>
-              }
-
-              @if (filteredDevices().length === 0) {
-                <mat-option disabled> No se encontraron dispositivos </mat-option>
+              } @else {
+                @for (vehicle of filteredVehicles(); track vehicle.id) {
+                  <mat-option [value]="vehicle.id" [disabled]="!!vehicle.device?.length">
+                    <div class="flex flex-col py-1">
+                      <span class="font-medium">{{ vehicle.name }}</span>
+                      <span class="text-xs text-slate-500">
+                        {{ vehicle.metadata.brand }} {{ vehicle.metadata.model }}
+                      </span>
+                    </div>
+                  </mat-option>
+                } @empty {
+                  <mat-option disabled>Sin resultados</mat-option>
+                }
               }
             </mat-select>
 
             @if (
+              formAssignment.get('vehicle_id')?.hasError('required') &&
+              formAssignment.get('vehicle_id')?.touched
+            ) {
+              <mat-error>Este campo es obligatorio.</mat-error>
+            }
+          </mat-form-field>
+
+          <!--  <mat-form-field class="bg-transparent!">
+            <mat-label>Dispositivos</mat-label>
+            <mat-select formControlName="device_id">
+              @if (isLoadingDevices()) {
+                <mat-option disabled>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" />
+                    <span> Cargando dispositivos... </span>
+                  </div>
+                </mat-option>
+              }
+              @for (device of arrayDevices; track device.id) {
+                <mat-option [value]="device.id">
+                  {{ getNameAndImei(device) }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (
               formAssignment.get('device_id')?.invalid && formAssignment.get('device_id')?.touched
             ) {
               <mat-error> Este campo es obligatorio. </mat-error>
+            }
+          </mat-form-field> -->
+
+          <mat-form-field class="bg-transparent!">
+            <mat-label>Dispositivos</mat-label>
+            <mat-select
+              formControlName="device_id"
+              (openedChange)="onPanelToggle($event, 'device')"
+            >
+              <div class="sticky top-0 z-10 border-b border-slate-200 bg-white p-2">
+                <input
+                  #deviceSearchInput
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Buscar por imei..."
+                  class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-primary-500"
+                  [value]="deviceSearch()"
+                  (input)="deviceSearch.set($any($event.target).value)"
+                  (keydown)="$event.stopPropagation()"
+                />
+              </div>
+
+              @if (isLoadingDevices()) {
+                <mat-option>
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="18" /> <span>Cargando dispositivos...</span>
+                  </div>
+                </mat-option>
+              } @else {
+                @for (device of filteredDevices(); track device.id) {
+                  <mat-option [value]="device.id">
+                    <div class="flex flex-col py-1">
+                      <span class="text-xs text-slate-500">
+                        {{ getNameAndImei(device) }}
+                      </span>
+                    </div>
+                  </mat-option>
+                } @empty {
+                  <mat-option>Sin resultados</mat-option>
+                }
+              }
+            </mat-select>
+
+            @if (
+              formAssignment.get('device_id')?.hasError('required') &&
+              formAssignment.get('device_id')?.touched
+            ) {
+              <mat-error>Este campo es obligatorio.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -143,13 +215,14 @@
               </p>
             </div>
 
-            @if (arraySensors.length > 0) {
+            @if (sensors().length > 0) {
               <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                @for (event of arraySensors; track event.id) {
+                @for (event of sensors(); track event.id) {
                   <mat-checkbox
-                    [checked]="arrayEvents.includes(event.sensor?.id)"
+                    [checked]="selectedSensors().has(event.sensor?.id)"
                     (change)="toggleSensor(event.sensor?.id, $event.checked)"
                   >
+                    >
                     {{ event.name }}
                   </mat-checkbox>
                 }

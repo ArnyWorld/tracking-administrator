@@ -16,6 +16,11 @@ export const ASSIGNMENT_ROUTES: Routes = [
       import('./pages/assignment-list/assignment-list').then((m) => m.AssignmentList),
   },
   {
+    path: 'companies',
+    loadComponent: () =>
+      import('./pages/list-companies/list-companies').then((m) => m.ListCompanies),
+  },
+  {
     path: ':id',
     loadComponent: () => import('./pages/assignment-form/device-form').then((m) => m.DeviceForm),
   },

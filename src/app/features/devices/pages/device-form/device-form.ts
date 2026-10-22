@@ -51,7 +51,6 @@ export class DeviceForm implements OnInit {
   formDevice: FormGroup;
   dbArray: any;
   action = 'Registro de';
-
   arrayGpsspecs: any[] = [];
   arrayDevices: any[] = [];
   arrayEnterprises: any[] = [];
@@ -76,7 +75,6 @@ export class DeviceForm implements OnInit {
       registred_date: [new Date()],
       enterprise_id: [null, Validators.required],
     });
-
     this.getGpsSpecs();
   }
 
@@ -100,6 +98,7 @@ export class DeviceForm implements OnInit {
       },
     });
   };
+
   private loadEnterprises = () => {
     this.isLoadingEnterprises.set(true);
     this.companyService.getAll().subscribe({

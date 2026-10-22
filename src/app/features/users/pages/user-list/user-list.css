@@ -1,0 +1,16 @@
+.demo-section,
+.db-section {
+  padding: 1px 7px;
+  border-radius: 15px;
+  font-weight: 500;
+}
+
+.demo-section {
+  background-color: rgb(181, 168, 252);
+  color: rgb(30, 0, 58);
+}
+
+.db-section {
+  background-color: rgb(252, 216, 172);
+  color: rgb(136, 76, 3);
+}

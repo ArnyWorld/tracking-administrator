@@ -8,20 +8,20 @@ import { CreateDeviceRequest, Device, PaginatedResponse } from '../../models/dev
 export class VehicleService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = environment.apiTest;
+  private readonly apiUrl = environment.apiUrl;
   private readonly apiName = 'vehicles';
-
   private prefix = '';
-
+  private db: string | null = null;
   setPrefix(prefix: string): void {
     this.prefix = prefix;
   }
 
   private get url(): string {
-    return `${this.apiUrl}${this.prefix}/${this.apiName}`;
+    return `${this.apiUrl}${this.prefix}/${this.db}/${this.apiName}`;
   }
 
-  getAll(): Observable<PaginatedResponse<Device>> {
+  getAll(db: string): Observable<PaginatedResponse<Device>> {
+    this.db = db;
     return this.http.get<PaginatedResponse<Device>>(this.url);
   }
 

@@ -97,8 +97,8 @@ export class CreateUserComponent {
     }
 
     this.confirmService.confirm(() => this.saveUser(), {
-      title: 'Registro de Usuario',
-      content: `¿Está seguro de que desea registrar al usuario ${this.formUser.controls.name.value}?`,
+      title: 'Registro de Cuenta',
+      content: `¿Está seguro de que desea registrar la cuenta ${this.formUser.controls.name.value}?`,
       danger: false,
     });
   }

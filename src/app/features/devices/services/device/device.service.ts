@@ -7,7 +7,7 @@ import { CreateDeviceRequest, DeviceRequest } from '../../models/device.interfac
 
 @Service()
 export class DeviceService {
-  apiUrl = environment.apiTest;
+  apiUrl = environment.apiUrl;
   apiUrl2 = environment.wsapiserver;
   apiName = 'devices';
   apiNameGateway = 'gateway/devices';
@@ -19,12 +19,13 @@ export class DeviceService {
   getAll(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.apiName}`);
   }
+
   getAllDevicesGateway(): Observable<any> {
     return this.http.get<ApiResponse>(this.apiUrl2 + this.prefix + `/${this.apiNameGateway}`);
   }
 
-  getAllDevicesWithImei(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.apiName}`);
+  getAllDevicesWithImei(db: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${db}/${this.apiName}`);
     /* .pipe(
         map((response) => ({
           ...response,

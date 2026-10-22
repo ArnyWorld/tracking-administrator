@@ -32,10 +32,10 @@ export class UserList implements AfterViewInit {
   dateTemplate!: TemplateRef<unknown>;
   @ViewChild('typeTemplate')
   typeTemplate!: TemplateRef<unknown>;
-
+  @ViewChild('dbTemplate')
+  dbTemplate!: TemplateRef<unknown>;
   users = signal<User[]>([]);
   loading = signal(false);
-
   columns: DataTableColumn<User>[] = [];
 
   ngOnInit(): void {
@@ -51,40 +51,39 @@ export class UserList implements AfterViewInit {
         sortable: true,
         value: (user) => `${user.name} ${user.lastname}`,
       },
-
       {
         key: 'email',
         label: 'Correo electrónico',
         typeField: 'text',
         sortable: true,
       },
-
       {
         key: 'phone',
         label: 'Teléfono',
         typeField: 'text',
         value: (user) => user.phone ?? 'Sin teléfono',
       },
-
       {
         key: 'username',
         label: 'Usuario',
         typeField: 'text',
         sortable: true,
       },
-
       {
         key: 'type',
         label: 'Tipo',
         template: this.typeTemplate,
       },
-
       {
         key: 'enterprises',
         label: 'Empresas',
         template: this.companyTemplate,
       },
-
+      {
+        key: 'database',
+        label: 'Base de Datos',
+        template: this.dbTemplate,
+      },
       {
         key: 'create_at',
         label: 'Registro',

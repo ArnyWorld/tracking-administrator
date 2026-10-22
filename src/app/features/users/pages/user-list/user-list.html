@@ -1,9 +1,15 @@
 <ng-template #companyTemplate let-user>
   <div class="flex items-center gap-3">
-    <!--     @for (enterprise of user?.enterprises; track enterprise; let i = $index) {
-      <div matBadge="1" matBadgeSize="small" class="demo-section">{{ enterprise?.name }}</div>
-    } -->
-    <span>{{ user?.enterprises?.length || 0 }}</span>
+    @for (enterprise of user?.enterprises; track enterprise; let i = $index) {
+      <div class="demo-section">{{ enterprise?.name }}</div>
+    }
+  </div>
+</ng-template>
+<ng-template #dbTemplate let-user>
+  <div class="flex items-center gap-3">
+    @for (enterprise of user?.enterprises; track enterprise; let i = $index) {
+      <div class="db-section">{{ enterprise?.database?.codename }}</div>
+    }
   </div>
 </ng-template>
 <ng-template #dateTemplate let-user>
@@ -26,9 +32,9 @@
 <div class="p-6">
   <div class="mb-6 flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-semibold text-slate-900">Usuarios</h1>
+      <h1 class="text-2xl font-semibold text-slate-900">Cuentas</h1>
 
-      <p class="mt-1 text-sm text-slate-500">Gestiona los usuarios registrados en la plataforma.</p>
+      <p class="mt-1 text-sm text-slate-500">Gestiona las cuentas registradas en la plataforma.</p>
     </div>
 
     <div class="flex items-center gap-2">
@@ -50,7 +56,7 @@
     [loading]="loading()"
     [pageSize]="10"
     [showPaginator]="true"
-    emptyMessage="No existen usuarios registrados."
+    emptyMessage="No existen cuentas registradas."
     (edit)="edit($event)"
     (delete)="delete($event)"
   />
