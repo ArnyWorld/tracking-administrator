@@ -157,7 +157,7 @@ export class DeviceList implements OnInit, AfterViewInit {
   }
 
   editDevice(device: DeviceTableRow): void {
-    this.router.navigate(['/device/edit', device.id]);
+    this.router.navigate(['/app/device/create', device.id]);
   }
 
   deleteDevice(device: DeviceTableRow): void {

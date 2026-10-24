@@ -4,6 +4,7 @@ import { ApiResponse } from '../../models/apiResponse.interface';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { CompanyRequest } from '../../models/companyRequest.interface';
+import { Device } from '../../../devices/models/device.interface';
 
 @Service()
 export class CompanyService {
@@ -13,6 +14,7 @@ export class CompanyService {
 
   private readonly apiName = 'adminmanager/user/enterprises';
   private readonly apiName2 = 'adminmanager/enterprise_devices';
+  private readonly apiName3 = 'adminmanager/devices';
 
   private prefix = '';
 
@@ -38,6 +40,10 @@ export class CompanyService {
     return this.http.post<ApiResponse>(this.getUrl2(), data);
   }
 
+  registerDeviceWithTimeZoneInEnterprise(data: Device): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.getUrl3(), data);
+  }
+
   getAllPaginate(
     page: number,
     pageSize: number,
@@ -57,8 +63,13 @@ export class CompanyService {
   private getUrl(): string {
     return `${this.apiUrl}${this.prefix}/${this.apiName}`;
   }
+
   private getUrl2(): string {
     return `${this.apiUrl}${this.prefix}/${this.apiName2}`;
+  }
+
+  private getUrl3(): string {
+    return `${this.apiUrl}${this.prefix}/${this.apiName3}`;
   }
 
   delete(id: string | number): Observable<ApiResponse> {

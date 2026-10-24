@@ -17,17 +17,17 @@ export class DeviceService {
   private http = inject(HttpClient);
   constructor() {}
 
-  getAll(): Observable<ApiResponse> {
+  public getAll(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.db}/${this.apiName}`);
   }
 
-  getAllDevicesGateway(): Observable<any> {
+  public getAllDevicesGateway(): Observable<any> {
     return this.http.get<ApiResponse>(
       this.apiUrl2 + this.prefix + `/${this.db}/${this.apiNameGateway}`,
     );
   }
 
-  getAllDevicesWithImei(db: string): Observable<ApiResponse> {
+  public getAllDevicesWithImei(db: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${db}/${this.apiName}`);
     /* .pipe(
         map((response) => ({
@@ -37,13 +37,19 @@ export class DeviceService {
       ); */
   }
 
-  findDeviceByImei = (imei: string): Observable<any> => {
+  public findDeviceByImei = (imei: string): Observable<any> => {
     return this.http.get<ApiResponse>(
       this.apiUrl2 + this.prefix + `/${this.apiNameGateway}?imei=${imei}`,
     );
   };
 
-  register(data: DeviceRequest, db: string): Observable<ApiResponse> {
+  public findDeviceById = (id: string): Observable<any> => {
+    return this.http.get<ApiResponse>(
+      this.apiUrl + this.prefix + `/${this.db}/${this.apiName}/${id}`,
+    );
+  };
+
+  public register(data: DeviceRequest, db: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(
       this.apiUrl + this.prefix + `/${db}/${this.apiName}/registry`,
       data,

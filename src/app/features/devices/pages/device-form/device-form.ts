@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DeviceService } from '../../services/device/device.service';
 import { UtilsService } from '../../../../core/services/utils/utils.service';
 import { UiUtilsService } from '../../../../core/services/utils/ui-utils.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmService } from '../../../../core/services/confirm/confirm.service';
 import { debounceTime, distinctUntilChanged, filter, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,6 +19,7 @@ import { GpsspecsService } from '../../services/gpsspecs/gpsspecs.service.servic
 import { DatabasesService } from '../../services/databases/databases.service';
 import { CompanyService as CompanyByUserService } from '../../services/company/company.service';
 import { CompanyService } from '../../../users/services/company/company.service';
+import { Device } from '../../models/device.interface';
 
 @Component({
   selector: 'app-device-form',
@@ -43,11 +44,13 @@ export class DeviceForm implements OnInit {
   private messageService = inject(UiUtilsService);
   private companyService = inject(CompanyByUserService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   private confirmService = inject(ConfirmService);
   private destroyRef = inject(DestroyRef);
   private dbService = inject(DatabasesService);
   private searchDevice$ = new Subject<string>();
   private enterpriseService = inject(CompanyService);
+
   formDevice: FormGroup;
   dbArray: any;
   action = 'Registro de';
@@ -59,6 +62,8 @@ export class DeviceForm implements OnInit {
   isLoadingDatabases = signal(false);
   isLoadingEnterprises = signal(false);
   dbSelected: string = '';
+  idDevice: string | undefined = '';
+  deviceRecovered?: Device;
   constructor() {
     this.formDevice = this.fb.group({
       info_brand: [null, Validators.required],
@@ -83,7 +88,37 @@ export class DeviceForm implements OnInit {
     this.onChangeDeviceId();
     this.loadEnterprises();
     this.onChangeEnterprise();
+    this.idDevice = this.activatedRoute.snapshot.paramMap.get('id') ?? undefined;
+    if (this.idDevice) {
+      this.getDeviceById();
+    }
   }
+
+  private getDeviceById = () => {
+    this.deviceService.findDeviceById(this.idDevice!).subscribe({
+      next: (data) => {
+        this.deviceRecovered = this.utilsService.getResponseGeneral(data)[0];
+        console.log(this.deviceRecovered);
+        this.formDevice.patchValue({
+          info_brand: this.deviceRecovered?.info_brand,
+          info_model: this.deviceRecovered?.info_model,
+          imei: this.deviceRecovered?.imei,
+          phone_number: this.deviceRecovered?.phone_number,
+          timezone: this.deviceRecovered?.timezone,
+          gpsspec_id: this.deviceRecovered?.gpsspec_id,
+          sendtype: this.deviceRecovered?.sendtype,
+          sendtime: this.deviceRecovered?.sendtime,
+          senddistance: this.deviceRecovered?.senddistance,
+          registred: this.deviceRecovered?.registred,
+          registred_date: this.deviceRecovered?.registred_date,
+          id: this.deviceRecovered?.id,
+        });
+      },
+      error: (err) => {
+        this.messageService.error('No se pudo recuperar la información del dispositivo.');
+      },
+    });
+  };
 
   private onChangeEnterprise = () => {
     this.formDevice.get('enterprise_id')?.valueChanges.subscribe((selectedId: any) => {
@@ -246,6 +281,25 @@ export class DeviceForm implements OnInit {
     );
   }
 
+  private saveDevice(): void {
+    if (this.formDevice.invalid) {
+      this.formDevice.markAllAsTouched();
+      return;
+    }
+    this.deviceService.register(this.formDevice.value, this.dbSelected).subscribe({
+      next: (data) => {
+        this.messageService.success('Se registró correctamente el dispositivo.');
+        console.log('saved device: ', data);
+        this.saveDeviceInEnterprise(data?.content);
+        this.saveDeviceWithTimeZone();
+      },
+
+      error: () => {
+        this.messageService.error('No se pudo registrar el dispositivo.');
+      },
+    });
+  }
+
   private saveDeviceInEnterprise = (data: any) => {
     this.enterpriseService
       .registerDeviceInEnterprise({
@@ -268,21 +322,21 @@ export class DeviceForm implements OnInit {
       });
   };
 
-  private saveDevice(): void {
+  private saveDeviceWithTimeZone(): void {
     if (this.formDevice.invalid) {
       this.formDevice.markAllAsTouched();
       return;
     }
-
-    this.deviceService.register(this.formDevice.value, this.dbSelected).subscribe({
+    this.enterpriseService.registerDeviceWithTimeZoneInEnterprise(this.formDevice.value).subscribe({
       next: (data) => {
-        this.messageService.success('Se registró correctamente el dispositivo.');
+        this.messageService.success(
+          'Se registró correctamente el dispositivo con su zona horaria.',
+        );
         console.log('saved device: ', data);
-        this.saveDeviceInEnterprise(data?.content);
       },
 
       error: () => {
-        this.messageService.error('No se pudo registrar el dispositivo.');
+        this.messageService.error('No se pudo registrar el dispositivo con su zona horaria.');
       },
     });
   }

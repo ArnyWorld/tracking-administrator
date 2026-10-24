@@ -11,6 +11,10 @@ export const DEVICE_ROUTES: Routes = [
     loadComponent: () => import('./pages/device-form/device-form').then((m) => m.DeviceForm),
   },
   {
+    path: 'create/:id',
+    loadComponent: () => import('./pages/device-form/device-form').then((m) => m.DeviceForm),
+  },
+  {
     path: 'list',
     loadComponent: () => import('./pages/device-list/device-list').then((m) => m.DeviceList),
   },
