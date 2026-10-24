@@ -1,7 +1,10 @@
 export const environment = {
   production: false,
   version: '1.0.0',
-  apiUrlLoginGateway: 'environment variable here',
-  apiUrlGateway: 'environment variable here',
-  apiserver: 'environment variable here',
+  apiUrlLoginGateway: 'http://172.20.50.123:8100/adminmanager',
+  apiUrlGateway: 'http://172.20.50.123:8100',
+  apiserver: 'http://172.20.1.5:9999/trackingdb',
+  apiTest: 'http://172.20.50.123:9988/trackingdb',
+  apiUrl: 'http://172.20.50.123:9988',
+  wsapiserver: 'http://172.20.1.5:8601',
 };

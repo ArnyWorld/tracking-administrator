@@ -12,16 +12,19 @@ export class DeviceService {
   apiName = 'devices';
   apiNameGateway = 'gateway/devices';
   prefix = '';
+  db = JSON.parse(localStorage.getItem('company')!)?.codename ?? null;
 
   private http = inject(HttpClient);
   constructor() {}
 
   getAll(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.apiName}`);
+    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.db}/${this.apiName}`);
   }
 
   getAllDevicesGateway(): Observable<any> {
-    return this.http.get<ApiResponse>(this.apiUrl2 + this.prefix + `/${this.apiNameGateway}`);
+    return this.http.get<ApiResponse>(
+      this.apiUrl2 + this.prefix + `/${this.db}/${this.apiNameGateway}`,
+    );
   }
 
   getAllDevicesWithImei(db: string): Observable<ApiResponse> {
@@ -40,9 +43,9 @@ export class DeviceService {
     );
   };
 
-  register(data: DeviceRequest): Observable<ApiResponse> {
+  register(data: DeviceRequest, db: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(
-      this.apiUrl + this.prefix + `/${this.apiName}/registry`,
+      this.apiUrl + this.prefix + `/${db}/${this.apiName}/registry`,
       data,
     );
   }

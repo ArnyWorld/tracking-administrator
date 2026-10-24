@@ -78,7 +78,7 @@ export class Login {
           return;
         }
 
-        void this.router.navigate(['app/user']);
+        void this.router.navigate(['app/home']);
       },
 
       error: (error) => {

@@ -93,7 +93,7 @@
               </a>
 
               <a
-                routerLink="/app/assignment/companies"
+                routerLink="/app/assignment/list"
                 routerLinkActive="bg-blue-600 text-white"
                 [routerLinkActiveOptions]="{ exact: true }"
                 class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
@@ -212,9 +212,41 @@
 
       <span class="flex-1"></span>
 
-      <button mat-icon-button type="button" aria-label="Notificaciones">
-        <mat-icon> notifications_none </mat-icon>
-      </button>
+      @if (companySelected) {
+        <div
+          class="group flex items-center gap-4 border-gray-200 bg-white px-4 transition-all duration-200 hover:border-emerald-300 hover:shadow-md"
+        >
+          <div
+            class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 p-1"
+          >
+            @if (companySelected?.image) {
+              <img
+                class="h-full w-full object-contain"
+                [src]="companySelected?.image"
+                alt="Logo de Trebol El Alto"
+              />
+            } @else {
+              <div
+                class="flex h-full w-full items-center justify-center rounded-lg bg-emerald-100 text-xl font-bold uppercase text-emerald-700"
+              >
+                {{ getCompanyInitials(companySelected?.name) }}
+              </div>
+            }
+          </div>
+
+          <div class="flex min-w-0 flex-1 flex-col">
+            <p class="truncate font-semibold tracking-tight text-gray-400 text-lg">
+              {{ companySelected?.name }}
+            </p>
+            <div
+              class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-1 text-emerald-700"
+            >
+              <mat-icon class="h-4! w-4! text-base!" aria-hidden="true"> storage </mat-icon>
+              <span class="text-xs font-medium">{{ companySelected?.codename }}</span>
+            </div>
+          </div>
+        </div>
+      }
     </mat-toolbar>
 
     <main class="min-h-[calc(100dvh-64px)] bg-slate-100 p-4 sm:p-6">

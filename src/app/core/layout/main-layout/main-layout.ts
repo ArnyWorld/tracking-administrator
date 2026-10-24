@@ -30,7 +30,25 @@ export class MainLayout {
   usersMenuOpen3: boolean = true;
   readonly currentUser = this.authService.getCurrentUser();
 
+  companySelected = localStorage.getItem('company')
+    ? JSON.parse(localStorage.getItem('company')!)
+    : null;
+
   logout(): void {
     this.authService.logout();
+  }
+
+  getCompanyInitials(name?: string | null): string {
+    if (!name?.trim()) {
+      return '?';
+    }
+
+    return name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((word) => word.charAt(0))
+      .join('')
+      .toUpperCase();
   }
 }

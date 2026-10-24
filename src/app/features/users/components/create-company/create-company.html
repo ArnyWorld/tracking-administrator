@@ -121,15 +121,13 @@
         }
       </div>
 
-      @if (type === 'enterprise') {
-        <div class="mb-6 flex justify-end">
-          <button mat-stroked-button type="button" (click)="addCompany()">
-            <mat-icon> add </mat-icon>
+      <div class="mb-6 flex justify-end">
+        <button mat-stroked-button type="button" (click)="addCompany()">
+          <mat-icon> add </mat-icon>
 
-            Agregar Empresa
-          </button>
-        </div>
-      }
+          Agregar Empresa
+        </button>
+      </div>
 
       <div class="flex justify-end gap-3">
         <button mat-stroked-button type="button" (click)="cancel()" [disabled]="isLoading">

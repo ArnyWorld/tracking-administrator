@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
+import { NoCompany } from '../../../../shared/no-company/no-company';
 
 @Component({
   selector: 'app-device-list',
@@ -28,6 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTooltipModule,
     MatTabsModule,
     DataTableComponent,
+    NoCompany,
   ],
   templateUrl: './device-list.html',
   styleUrl: './device-list.css',
@@ -38,6 +40,7 @@ export class DeviceList implements OnInit, AfterViewInit {
   private readonly confirmService = inject(ConfirmService);
   private readonly router = inject(Router);
 
+  public companySelected = localStorage.getItem('company');
   @ViewChild('brandTemplate')
   brandTemplate!: TemplateRef<unknown>;
 

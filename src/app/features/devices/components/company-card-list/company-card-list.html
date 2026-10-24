@@ -5,7 +5,7 @@
     <p class="text-sm">Cuando se registre una empresa aparecerá aquí.</p>
   </div>
 } @else {
-  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
     @for (company of visible(); track company.id) {
       <mat-card
         appearance="outlined"
@@ -67,11 +67,11 @@
           </div>
         </mat-card-content>
 
-        <mat-card-actions class="!justify-between !px-5 !pb-4">
+        <mat-card-actions class="justify-between! px-5! pb-4!">
           <span class="text-xs text-gray-500"
             >Creada el {{ company.create_at | date: 'mediumDate' }}</span
           >
-          <button mat-flat-button (click)="selected.emit(company)">Abrir</button>
+          <button mat-flat-button (click)="selectedCompany(company)">Seleccionar</button>
         </mat-card-actions>
       </mat-card>
     }

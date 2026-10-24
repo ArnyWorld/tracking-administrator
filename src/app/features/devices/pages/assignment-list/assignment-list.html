@@ -1,94 +1,98 @@
-<ng-template #vehicleNameTemplate let-assignment>
-  <div class="flex items-center justify-center py-2">
-    @if (assignment?.vehicle?.name) {
-      {{ assignment?.vehicle?.name }}
-    } @else {
-      <span class="bg-gray-100 rounded-md px-2"> Sin vehículo registrado </span>
-    }
-  </div>
-</ng-template>
-
-<ng-template #vehiclePlateTemplate let-assignment>
-  <div class="flex items-center justify-center py-2">
-    @if (assignment.vehicle?.metadata?.plaque) {
-      {{ assignment.vehicle?.metadata?.plaque }}
-    } @else {
-      <span class="bg-gray-100 rounded-md-xl p-1"> Sin vehículo registrado </span>
-    }
-  </div>
-</ng-template>
-
-<ng-template #vehicleBrandTemplate let-assignment>
-  <div class="flex items-center justify-center py-2">
-    @if (assignment.vehicle?.metadata?.brand) {
-      {{ assignment.vehicle?.metadata?.brand }}
-    } @else {
-      <span class="bg-gray-100 rounded-md-xl p-1"> Sin vehículo registrado </span>
-    }
-  </div>
-</ng-template>
-
-<ng-template #deviceNameTemplate let-assignment>
-  <div class="flex items-center justify-center py-2">
-    @if (assignment.device?.info_model) {
-      {{ assignment.device?.info_model }}
-    } @else {
-      <span class="bg-red-100 rounded-md p-1"> Sin dispositivo registrado </span>
-    }
-  </div>
-</ng-template>
-
-<ng-template #deviceImeiTemplate let-assignment>
-  <div class="flex items-center justify-center py-2">
-    @if (assignment.device?.id) {
-      {{ assignment.device?.id }}
-    } @else {
-      <span class="bg-red-100 rounded-md p-1"> Sin dispositivo registrado </span>
-    }
-  </div>
-</ng-template>
-
-<div class="w-full p-6">
-  <div class="mb-6 flex items-center justify-between">
-    <div>
-      <h2 class="text-2xl font-semibold text-slate-800">Lista de Asignaciones de dispositivos</h2>
-
-      <p class="mt-1 text-sm text-slate-500">
-        Gestiona los dispositivos asignados a la flota de vehículos.
-      </p>
+@if (companySelected) {
+  <ng-template #vehicleNameTemplate let-assignment>
+    <div class="flex items-center justify-center py-2">
+      @if (assignment?.vehicle?.name) {
+        {{ assignment?.vehicle?.name }}
+      } @else {
+        <span class="bg-gray-100 rounded-md px-2"> Sin vehículo registrado </span>
+      }
     </div>
+  </ng-template>
 
-    <div class="flex items-center gap-2">
-      <button
-        mat-icon-button
-        type="button"
-        aria-label="Recargar empresas"
-        matTooltip="Recargar"
-        (click)="reload()"
-      >
-        <mat-icon>refresh</mat-icon>
-      </button>
-
-      <button mat-flat-button color="primary" routerLink="/app/user/create">
-        <mat-icon>add</mat-icon>
-        Registrar
-      </button>
+  <ng-template #vehiclePlateTemplate let-assignment>
+    <div class="flex items-center justify-center py-2">
+      @if (assignment.vehicle?.metadata?.plaque) {
+        {{ assignment.vehicle?.metadata?.plaque }}
+      } @else {
+        <span class="bg-gray-100 rounded-md-xl p-1"> Sin vehículo registrado </span>
+      }
     </div>
+  </ng-template>
+
+  <ng-template #vehicleBrandTemplate let-assignment>
+    <div class="flex items-center justify-center py-2">
+      @if (assignment.vehicle?.metadata?.brand) {
+        {{ assignment.vehicle?.metadata?.brand }}
+      } @else {
+        <span class="bg-gray-100 rounded-md-xl p-1"> Sin vehículo registrado </span>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #deviceNameTemplate let-assignment>
+    <div class="flex items-center justify-center py-2">
+      @if (assignment.device?.info_model) {
+        {{ assignment.device?.info_model }}
+      } @else {
+        <span class="bg-red-100 rounded-md p-1"> Sin dispositivo registrado </span>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #deviceImeiTemplate let-assignment>
+    <div class="flex items-center justify-center py-2">
+      @if (assignment.device?.id) {
+        {{ assignment.device?.id }}
+      } @else {
+        <span class="bg-red-100 rounded-md p-1"> Sin dispositivo registrado </span>
+      }
+    </div>
+  </ng-template>
+
+  <div class="w-full p-6">
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-800">Lista de Asignaciones de dispositivos</h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Gestiona los dispositivos asignados a la flota de vehículos.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Recargar empresas"
+          matTooltip="Recargar"
+          (click)="reload()"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+
+        <button mat-flat-button color="primary" routerLink="/app/user/create">
+          <mat-icon>add</mat-icon>
+          Registrar
+        </button>
+      </div>
+    </div>
+    <app-data-table
+      [data]="assignmentsDevice"
+      [columns]="columns"
+      [loading]="isLoading()"
+      [total]="total"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [showActions]="true"
+      [showUserAction]="false"
+      [showEditAction]="true"
+      [showDeleteAction]="true"
+      (userAction)="(null)"
+      (edit)="editCompany($event)"
+      (delete)="deleteCompany($event)"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
-  <app-data-table
-    [data]="assignmentsDevice"
-    [columns]="columns"
-    [loading]="isLoading()"
-    [total]="total"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    [showActions]="true"
-    [showUserAction]="false"
-    [showEditAction]="true"
-    [showDeleteAction]="true"
-    (userAction)="(null)"
-    (edit)="editCompany($event)"
-    (delete)="deleteCompany($event)"
-    (pageChange)="onPageChange($event)"
-  />
-</div>
+} @else {
+  <app-no-company />
+}

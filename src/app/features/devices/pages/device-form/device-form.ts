@@ -58,7 +58,7 @@ export class DeviceForm implements OnInit {
   isLoadingDevices = signal(false);
   isLoadingDatabases = signal(false);
   isLoadingEnterprises = signal(false);
-
+  dbSelected: string = '';
   constructor() {
     this.formDevice = this.fb.group({
       info_brand: [null, Validators.required],
@@ -82,7 +82,18 @@ export class DeviceForm implements OnInit {
     this.configureDeviceSearch();
     this.onChangeDeviceId();
     this.loadEnterprises();
+    this.onChangeEnterprise();
   }
+
+  private onChangeEnterprise = () => {
+    this.formDevice.get('enterprise_id')?.valueChanges.subscribe((selectedId: any) => {
+      if (selectedId) {
+        const db = this.arrayEnterprises.find((enterprise) => enterprise?.id == selectedId);
+        this.dbSelected = db?.databases[0]?.codename;
+        console.log(this.dbSelected);
+      }
+    });
+  };
 
   private loadDatabases = () => {
     this.isLoadingDatabases.set(true);
@@ -263,7 +274,7 @@ export class DeviceForm implements OnInit {
       return;
     }
 
-    this.deviceService.register(this.formDevice.value).subscribe({
+    this.deviceService.register(this.formDevice.value, this.dbSelected).subscribe({
       next: (data) => {
         this.messageService.success('Se registró correctamente el dispositivo.');
         console.log('saved device: ', data);

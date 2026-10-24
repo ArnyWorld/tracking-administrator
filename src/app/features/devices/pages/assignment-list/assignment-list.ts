@@ -20,6 +20,7 @@ import { DataTableColumn } from '../../../../core/models/table-column.interface'
 import { AssignmentResponse } from '../../models/device.interface';
 import { PageEvent } from '@angular/material/paginator';
 import { DeviceVehicleService } from '../../services/device-vehicle/device-vehicle.service';
+import { NoCompany } from '../../../../shared/no-company/no-company';
 
 @Component({
   selector: 'app-assignment-list',
@@ -30,6 +31,7 @@ import { DeviceVehicleService } from '../../services/device-vehicle/device-vehic
     MatIconModule,
     MatTooltipModule,
     DataTableComponent,
+    NoCompany,
   ],
   templateUrl: './assignment-list.html',
   styleUrl: './assignment-list.css',
@@ -39,7 +41,7 @@ export class AssignmentList implements OnInit, AfterViewInit {
   private uiUtilsService = inject(UiUtilsService);
   private confirmService = inject(ConfirmService);
   private router = inject(Router);
-
+  public companySelected = localStorage.getItem('company');
   @ViewChild('vehicleNameTemplate')
   vehicleNameTemplate!: TemplateRef<unknown>;
 

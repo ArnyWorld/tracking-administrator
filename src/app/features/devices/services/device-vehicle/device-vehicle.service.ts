@@ -6,9 +6,10 @@ import { ApiResponse } from '../../../users/models/apiResponse.interface';
 
 @Service()
 export class DeviceVehicleService {
-  apiUrl = environment.apiTest;
+  apiUrl = environment.apiUrl;
   apiName = 'device_vehicle';
   prefix = '';
+  db = JSON.parse(localStorage.getItem('company')!)?.codename ?? null;
 
   private http = inject(HttpClient);
   constructor() {}
@@ -30,7 +31,7 @@ export class DeviceVehicleService {
   }
 
   getAll(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.apiName}`);
+    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.db}/${this.apiName}`);
   }
 
   getAllPaginate(
@@ -42,7 +43,7 @@ export class DeviceVehicleService {
     return this.http.get<ApiResponse>(
       this.apiUrl +
         this.prefix +
-        `/${this.apiName}?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}`,
+        `/${this.db}/${this.apiName}?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}`,
     );
   }
 
