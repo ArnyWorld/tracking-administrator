@@ -1,110 +1,204 @@
-<mat-sidenav-container class="h-dvh bg-slate-100">
-  <!-- =========================================================
-       SIDEBAR
-       ========================================================= -->
-  <mat-sidenav #sidenav mode="side" opened class="w-64 border-r border-slate-200 bg-slate-950">
+<mat-sidenav-container class="h-dvh bg-slate-950!">
+  <mat-sidenav #sidenav mode="side" opened class="w-64 border-r border-slate-200 bg-slate-950!">
     <div class="flex h-full flex-col">
-      <!-- Logo -->
       <div class="flex h-16 shrink-0 items-center border-b border-white/10 px-5">
-        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-600 text-white">
           <mat-icon> location_on </mat-icon>
         </div>
 
         <div class="ml-3">
           <div class="text-base font-bold text-white">
-            Fleet<span class="text-blue-400">Track</span>
+            Kerno<span class="text-orange-400">Tracking</span>
           </div>
 
           <div class="text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-            GPS Management
+            GPS Administrador
           </div>
         </div>
       </div>
-
-      <!-- Navegación -->
       <nav class="flex-1 space-y-1 p-3" aria-label="Navegación principal">
+        <div>
+          <button
+            type="button"
+            (click)="usersMenuOpen = !usersMenuOpen"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <mat-icon>account_box</mat-icon>
+
+            <span class="flex-1">Cuentas</span>
+
+            <mat-icon class="transition-transform duration-200" [class.rotate-180]="usersMenuOpen">
+              expand_more
+            </mat-icon>
+          </button>
+
+          @if (usersMenuOpen) {
+            <div class="ml-4 mt-1 space-y-1 border-l border-white/10 pl-3">
+              <a
+                routerLink="/app/user/create"
+                routerLinkActive="bg-blue-600 text-white"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2"><mat-icon>add</mat-icon> Crear Cuenta</span>
+              </a>
+
+              <a
+                routerLink="/app/user/company-list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar empresas</span
+                >
+              </a>
+              <a
+                routerLink="/app/user/list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar cuentas</span
+                >
+              </a>
+            </div>
+          }
+        </div>
+        <div>
+          <button
+            type="button"
+            (click)="usersMenuOpen2 = !usersMenuOpen2"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <mat-icon>on_device_training</mat-icon>
+
+            <span class="flex-1">Asignación</span>
+
+            <mat-icon class="transition-transform duration-200" [class.rotate-180]="usersMenuOpen">
+              expand_more
+            </mat-icon>
+          </button>
+
+          @if (usersMenuOpen2) {
+            <div class="ml-4 mt-1 space-y-1 border-l border-white/10 pl-3">
+              <a
+                routerLink="/app/assignment/create"
+                routerLinkActive="bg-blue-600 text-white"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2"
+                  ><mat-icon>add</mat-icon> Asignar Dispositivo</span
+                >
+              </a>
+
+              <a
+                routerLink="/app/assignment/list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar Asignaciones</span
+                >
+              </a>
+            </div>
+          }
+        </div>
+
+        <div>
+          <button
+            type="button"
+            (click)="usersMenuOpen3 = !usersMenuOpen3"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <mat-icon>smartphone</mat-icon>
+
+            <span class="flex-1">Dispositivos</span>
+
+            <mat-icon class="transition-transform duration-200" [class.rotate-180]="usersMenuOpen">
+              expand_more
+            </mat-icon>
+          </button>
+
+          @if (usersMenuOpen3) {
+            <div class="ml-4 mt-1 space-y-1 border-l border-white/10 pl-3">
+              <a
+                routerLink="/app/device/create"
+                routerLinkActive="bg-blue-600 text-white"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2"
+                  ><mat-icon>save</mat-icon> Registro de Dispositivo</span
+                >
+              </a>
+
+              <a
+                routerLink="/app/device/list"
+                routerLinkActive="bg-blue-600 text-white"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <mat-icon>list</mat-icon>Listar Dispositivos</span
+                >
+              </a>
+            </div>
+          }
+        </div>
+
         <a
-          routerLink="/app/dashboard"
-          routerLinkActive="bg-blue-600 text-white"
+          href="http://172.21.11.28:4203/dashboard/live-gps"
+          target="_blank"
           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
         >
-          <mat-icon> dashboard </mat-icon>
+          <mat-icon>location_on</mat-icon>
 
-          <span> Dashboard </span>
-        </a>
-
-        <!-- Futuros módulos -->
-
-        <a
-          routerLink="/app/vehicles"
-          routerLinkActive="bg-blue-600 text-white"
-          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
-        >
-          <mat-icon> directions_car </mat-icon>
-
-          <span> Vehículos </span>
-        </a>
-
-        <a
-          routerLink="/app/monitoring"
-          routerLinkActive="bg-blue-600 text-white"
-          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
-        >
-          <mat-icon> location_on </mat-icon>
-
-          <span> Monitoreo </span>
+          <span>Monitoreo</span>
         </a>
       </nav>
 
-      <!-- Usuario -->
       <div class="border-t border-white/10 p-3">
         <button
-          mat-button
           [matMenuTriggerFor]="userMenu"
-          class="!flex !h-auto !w-full !items-center !justify-start !rounded-lg !px-3 !py-3 !text-left"
+          class="h-auto! w-full! flex! flex-row! items-center! justify-start! rounded-lg! px-3! py-3! text-left! cursor-pointer"
         >
           <div
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white"
           >
-            {{ currentUser?.name?.charAt(0) ?? 'U' }}
+            {{ currentUser?.user?.username?.charAt(0)?.toUpperCase() ?? 'U' }}
           </div>
 
-          <div class="ml-3 min-w-0">
-            <div class="truncate text-sm font-semibold text-white">
-              {{ currentUser?.name ?? currentUser?.username ?? 'Usuario' }}
+          <div class="ml-3 flex min-w-0 flex-1 flex-col items-start">
+            <div class="w-full truncate text-sm font-semibold leading-5 text-white">
+              {{ currentUser?.user?.username ?? 'Usuario' }}
             </div>
 
-            <div class="truncate text-xs text-slate-400">
-              {{ currentUser?.email ?? currentUser?.username ?? '' }}
+            <div class="w-full truncate text-xs leading-5 text-slate-400">
+              {{ currentUser?.user?.email ?? '' }}
             </div>
           </div>
 
-          <mat-icon class="ml-auto text-slate-400"> more_vert </mat-icon>
+          <mat-icon class="ml-2 shrink-0 text-slate-400"> more_vert </mat-icon>
         </button>
 
         <mat-menu #userMenu="matMenu">
           <button mat-menu-item type="button">
-            <mat-icon> person </mat-icon>
-
-            <span> Mi perfil </span>
+            <mat-icon>person</mat-icon>
+            <span>Mi perfil</span>
           </button>
 
           <button mat-menu-item type="button" (click)="logout()">
-            <mat-icon> logout </mat-icon>
-
-            <span> Cerrar sesión </span>
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar sesión</span>
           </button>
         </mat-menu>
       </div>
     </div>
   </mat-sidenav>
 
-  <!-- =========================================================
-       CONTENIDO PRINCIPAL
-       ========================================================= -->
   <mat-sidenav-content>
-    <!-- Header -->
-    <mat-toolbar class="!border-b !border-slate-200 !bg-white !text-slate-900">
+    <mat-toolbar class="border-b! border-slate-200! bg-white! text-slate-900!">
       <button
         mat-icon-button
         type="button"
@@ -118,12 +212,43 @@
 
       <span class="flex-1"></span>
 
-      <button mat-icon-button type="button" aria-label="Notificaciones">
-        <mat-icon> notifications_none </mat-icon>
-      </button>
+      @if (companySelected) {
+        <div
+          class="group flex items-center gap-4 border-gray-200 bg-white px-4 transition-all duration-200 hover:border-emerald-300 hover:shadow-md"
+        >
+          <div
+            class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50 p-1"
+          >
+            @if (companySelected?.image) {
+              <img
+                class="h-full w-full object-contain"
+                [src]="companySelected?.image"
+                alt="Logo de Trebol El Alto"
+              />
+            } @else {
+              <div
+                class="flex h-full w-full items-center justify-center rounded-lg bg-emerald-100 text-xl font-bold uppercase text-emerald-700"
+              >
+                {{ getCompanyInitials(companySelected?.name) }}
+              </div>
+            }
+          </div>
+
+          <div class="flex min-w-0 flex-1 flex-col">
+            <p class="truncate font-semibold tracking-tight text-gray-400 text-lg">
+              {{ companySelected?.name }}
+            </p>
+            <div
+              class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-1 text-emerald-700"
+            >
+              <mat-icon class="h-4! w-4! text-base!" aria-hidden="true"> storage </mat-icon>
+              <span class="text-xs font-medium">{{ companySelected?.codename }}</span>
+            </div>
+          </div>
+        </div>
+      }
     </mat-toolbar>
 
-    <!-- Página -->
     <main class="min-h-[calc(100dvh-64px)] bg-slate-100 p-4 sm:p-6">
       <router-outlet />
     </main>

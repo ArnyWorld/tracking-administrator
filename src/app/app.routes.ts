@@ -25,11 +25,25 @@ export const routes: Routes = [
         path: 'user',
         loadChildren: () => import('./features/users/user.routes').then((m) => m.USER_ROUTES),
       },
+      {
+        path: 'assignment',
+        loadChildren: () =>
+          import('./features/devices/assignment.routes').then((m) => m.ASSIGNMENT_ROUTES),
+      },
+      {
+        path: 'device',
+        loadChildren: () =>
+          import('./features/devices/devices.routes').then((m) => m.DEVICE_ROUTES),
+      },
+      {
+        path: 'home',
+        loadChildren: () => import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
+      },
 
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'user',
       },
     ],
   },
@@ -42,6 +56,6 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'app/dashboard',
+    redirectTo: 'user',
   },
 ];
