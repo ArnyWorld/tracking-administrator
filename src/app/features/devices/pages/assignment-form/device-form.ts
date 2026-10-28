@@ -281,14 +281,14 @@ export class DeviceForm implements OnInit {
     }
 
     const action = this.isEditMode ? 'actualizar' : 'registrar';
-    this.confirmService.confirm(() => this.submit(), {
+    this.confirmService.confirm(() => this.register(), {
       title: this.isEditMode ? 'Actualizar asignación' : 'Registrar asignación',
       content: `¿Está seguro de que desea ${action} la asignación del dispositivo?`,
       danger: false,
     });
   }
 
-  private submit(): void {
+  private register(): void {
     const payload = {
       ...this.formAssignment.getRawValue(),
       sensors: [...this.selectedSensors()].map((sensor_id) => ({ sensor_id })),
@@ -303,6 +303,7 @@ export class DeviceForm implements OnInit {
         this.ui.success(
           `Se ${this.isEditMode ? 'actualizó' : 'registró'} correctamente la asignación.`,
         );
+
         this.cancel();
       },
       error: () =>
@@ -311,6 +312,6 @@ export class DeviceForm implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/list-assignments']);
+    this.router.navigate(['/app/assignment/list']);
   }
 }
