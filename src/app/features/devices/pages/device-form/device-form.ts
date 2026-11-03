@@ -20,6 +20,8 @@ import { DatabasesService } from '../../services/databases/databases.service';
 import { CompanyService as CompanyByUserService } from '../../services/company/company.service';
 import { CompanyService } from '../../../users/services/company/company.service';
 import { Device } from '../../models/device.interface';
+import { Enterprise } from '../../../users/models/userResponse.interface';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-device-form',
@@ -50,6 +52,8 @@ export class DeviceForm implements OnInit {
   private dbService = inject(DatabasesService);
   private searchDevice$ = new Subject<string>();
   private enterpriseService = inject(CompanyService);
+  private authService = inject(AuthService);
+  private company = this.authService.getCompany();
 
   formDevice: FormGroup;
   dbArray: any;
@@ -62,6 +66,7 @@ export class DeviceForm implements OnInit {
   isLoadingDatabases = signal(false);
   isLoadingEnterprises = signal(false);
   dbSelected: string = '';
+  enterpriseSelected?: Enterprise;
   idDevice: string | undefined = '';
   deviceRecovered?: Device;
   constructor() {
@@ -98,7 +103,6 @@ export class DeviceForm implements OnInit {
     this.deviceService.findDeviceById(this.idDevice!).subscribe({
       next: (data) => {
         this.deviceRecovered = this.utilsService.getResponseGeneral(data)[0];
-        console.log(this.deviceRecovered);
         this.formDevice.patchValue({
           info_brand: this.deviceRecovered?.info_brand,
           info_model: this.deviceRecovered?.info_model,
@@ -125,7 +129,7 @@ export class DeviceForm implements OnInit {
       if (selectedId) {
         const db = this.arrayEnterprises.find((enterprise) => enterprise?.id == selectedId);
         this.dbSelected = db?.databases[0]?.codename;
-        console.log(this.dbSelected);
+        this.enterpriseSelected = db;
       }
     });
   };
@@ -136,7 +140,6 @@ export class DeviceForm implements OnInit {
       next: (data) => {
         this.dbArray = this.utilsService.getResponseGeneral(data) ?? [];
         this.isLoadingDatabases.set(false);
-        console.log(this.dbArray);
       },
       error: () => {
         this.messageService.error('No se pudieron recuperar las bases de datos.');
@@ -151,7 +154,10 @@ export class DeviceForm implements OnInit {
       next: (data) => {
         this.arrayEnterprises = this.utilsService.getResponseGeneral(data) ?? [];
         this.isLoadingEnterprises.set(false);
-        console.log(this.arrayEnterprises);
+        const companySelected = this.arrayEnterprises.find((e) => e.id === this.company?.id);
+        this.formDevice.patchValue({
+          enterprise_id: companySelected?.id,
+        });
       },
       error: () => {
         this.messageService.error('No se pudieron recuperar las bases de datos.');
@@ -192,13 +198,11 @@ export class DeviceForm implements OnInit {
 
   onSearch(value: string): void {
     const search = value.trim();
-
     if (search.length < 4) {
       this.arrayDevices = [];
       this.isLoadingDevices.set(false);
       return;
     }
-
     this.searchDevice$.next(search);
   }
 
@@ -214,16 +218,13 @@ export class DeviceForm implements OnInit {
             gpsspec_id: null,
             imei: null,
           });
-
           return;
         }
-
         const device = this.arrayDevices.find((deviceFind) => deviceFind.id === value);
 
         if (!device) {
           return;
         }
-
         this.formDevice.patchValue({
           info_brand: device.brand ?? null,
           info_model: device.model ?? null,
@@ -258,24 +259,19 @@ export class DeviceForm implements OnInit {
   showConfirm(): void {
     if (this.formDevice.invalid) {
       this.formDevice.markAllAsTouched();
-
       this.messageService.warning('Llene los campos obligatorios.');
-
       return;
     }
-
     this.confirmService.confirm(
       async () => {
         this.saveDevice();
       },
       {
         title: 'Registrar dispositivo',
-
         content: `
           ¿Estás seguro de que desea registrar el dispositivo
           con IMEI: ${this.formDevice.value.imei}?
         `,
-
         danger: false,
       },
     );
@@ -289,7 +285,6 @@ export class DeviceForm implements OnInit {
     this.deviceService.register(this.formDevice.value, this.dbSelected).subscribe({
       next: (data) => {
         this.messageService.success('Se registró correctamente el dispositivo.');
-        console.log('saved device: ', data);
         this.saveDeviceInEnterprise(data?.content);
         this.saveDeviceWithTimeZone();
       },
@@ -311,8 +306,6 @@ export class DeviceForm implements OnInit {
           this.messageService.success(
             'Se registró correctamente el dispositivo en la empresa seleccionada.',
           );
-          console.log('saved device in enterprise: ', res);
-
           this.router.navigate(['/app/device/list']);
         },
 
@@ -327,12 +320,28 @@ export class DeviceForm implements OnInit {
       this.formDevice.markAllAsTouched();
       return;
     }
-    this.enterpriseService.registerDeviceWithTimeZoneInEnterprise(this.formDevice.value).subscribe({
+
+    const payload = {
+      brand: this.formDevice.value.info_brand,
+      enabled: true,
+      type: 'tracker',
+      model: this.formDevice.value.info_model,
+      serial: this.formDevice.value.imei,
+      imei: this.formDevice.value.imei,
+      gpsspec_id: this.formDevice.value.gpsspec_id,
+      registred: false,
+      timezone: this.formDevice.value.timezone,
+      sendtype: this.formDevice.value.sendtype,
+      sendtime: this.formDevice.value.sendtime,
+      senddistance: this.formDevice.value.senddistance,
+      enterprises: [this.enterpriseSelected],
+      id: this.formDevice.value.id,
+    };
+    this.enterpriseService.registerDeviceWithTimeZoneInEnterprise(payload).subscribe({
       next: (data) => {
         this.messageService.success(
           'Se registró correctamente el dispositivo con su zona horaria.',
         );
-        console.log('saved device: ', data);
       },
 
       error: () => {

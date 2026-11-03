@@ -8,14 +8,15 @@ import { ApiResponse } from '../../../users/models/apiResponse.interface';
   providedIn: 'root',
 })
 export class GpsspecsService {
-  apiUrl = environment.apiTest;
+  apiUrl = environment.apiUrl;
   apiName = 'gpsspecs';
   prefix = '';
+  db = JSON.parse(localStorage.getItem('company')!)?.codename ?? null;
 
   private http = inject(HttpClient);
   constructor() {}
 
   getAll(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.apiName}`);
+    return this.http.get<ApiResponse>(this.apiUrl + this.prefix + `/${this.db}/${this.apiName}`);
   }
 }

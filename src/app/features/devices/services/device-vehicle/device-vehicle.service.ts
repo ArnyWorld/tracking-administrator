@@ -19,7 +19,7 @@ export class DeviceVehicleService {
   }
 
   register(datos: any): Observable<any> {
-    return this.http.post(this.apiUrl + this.prefix + `/${this.apiName}`, datos);
+    return this.http.post(this.apiUrl + this.prefix + `/${this.db}/${this.apiName}`, datos);
   }
 
   update(datos: any, id: any): Observable<any> {

@@ -126,6 +126,10 @@ export class AuthService {
     sessionStorage.setItem(this.storageKey, serializedSession);
   }
 
+  public getCompany = () => {
+    return JSON.parse(localStorage.getItem('company')!);
+  };
+
   private isSessionExpired(session: AuthSession): boolean {
     return Date.now() >= session.expires;
   }

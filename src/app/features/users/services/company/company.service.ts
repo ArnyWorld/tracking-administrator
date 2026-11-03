@@ -16,6 +16,7 @@ export class CompanyService {
   private readonly apiName2 = 'adminmanager/enterprise_devices';
   private readonly apiName3 = 'adminmanager/devices';
 
+  db = JSON.parse(localStorage.getItem('company')!)?.codename ?? null;
   private prefix = '';
 
   setPrefix(prefix: string): void {
