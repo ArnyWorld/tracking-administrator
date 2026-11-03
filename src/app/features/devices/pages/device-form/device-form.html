@@ -135,7 +135,7 @@
 
               @for (gps of arrayGpsspecs; track gps.id) {
                 <mat-option [value]="gps.id">
-                  {{ gps.name }}
+                  {{ gps.name || gps.id }}
                 </mat-option>
               }
             </mat-select>

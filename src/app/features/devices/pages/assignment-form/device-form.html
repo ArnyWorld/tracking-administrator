@@ -51,38 +51,6 @@
             }
           </mat-form-field>
 
-          <!-- <mat-form-field class="bg-transparent!">
-            <mat-label>Vehículos</mat-label>
-            <mat-select formControlName="vehicle_id">
-              @if (isLoadingVehicles()) {
-                <mat-option disabled>
-                  <div class="flex items-center gap-2">
-                    <mat-spinner diameter="18" />
-                    <span> Cargando vehículos... </span>
-                  </div>
-                </mat-option>
-              }
-              @for (vehicle of arrayVehicles; track vehicle.id) {
-                <mat-option [value]="vehicle.id" [disabled]="vehicle.device?.length > 0">
-                  <div class="flex flex-col py-1">
-                    <span class="font-medium">
-                      {{ vehicle.name }}
-                    </span>
-
-                    <span class="text-xs text-slate-500">
-                      {{ vehicle.metadata?.brand }}
-                      {{ vehicle.metadata?.model }}
-                    </span>
-                  </div>
-                </mat-option>
-              }
-            </mat-select>
-            @if (
-              formAssignment.get('vehicle_id')?.invalid && formAssignment.get('vehicle_id')?.touched
-            ) {
-              <mat-error> Este campo es obligatorio. </mat-error>
-            }
-          </mat-form-field> -->
           <mat-form-field appearance="outline">
             <mat-label>Vehículos</mat-label>
             <mat-select
@@ -131,30 +99,6 @@
               <mat-error>Este campo es obligatorio.</mat-error>
             }
           </mat-form-field>
-
-          <!--  <mat-form-field class="bg-transparent!">
-            <mat-label>Dispositivos</mat-label>
-            <mat-select formControlName="device_id">
-              @if (isLoadingDevices()) {
-                <mat-option disabled>
-                  <div class="flex items-center gap-2">
-                    <mat-spinner diameter="18" />
-                    <span> Cargando dispositivos... </span>
-                  </div>
-                </mat-option>
-              }
-              @for (device of arrayDevices; track device.id) {
-                <mat-option [value]="device.id">
-                  {{ getNameAndImei(device) }}
-                </mat-option>
-              }
-            </mat-select>
-            @if (
-              formAssignment.get('device_id')?.invalid && formAssignment.get('device_id')?.touched
-            ) {
-              <mat-error> Este campo es obligatorio. </mat-error>
-            }
-          </mat-form-field> -->
 
           <mat-form-field appearance="outline">
             <mat-label>Dispositivos</mat-label>

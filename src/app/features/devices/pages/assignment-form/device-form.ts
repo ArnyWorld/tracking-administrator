@@ -29,6 +29,7 @@ import { UtilsService } from '../../../../core/services/utils/utils.service';
 import { UiUtilsService } from '../../../../core/services/utils/ui-utils.service';
 import { ConfirmService } from '../../../../core/services/confirm/confirm.service';
 import { CompanyService as CompanyByUserService } from '../../services/company/company.service';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 interface Vehicle {
   id: string;
   name?: string;
@@ -67,6 +68,7 @@ const normalize = (value: unknown): string =>
   styleUrl: './device-form.css',
 })
 export class DeviceForm implements OnInit {
+  private authService = inject(AuthService);
   private readonly vehiclesService = inject(VehicleService);
   private readonly devicesService = inject(DeviceService);
   private readonly companyService = inject(CompanyByUserService);
@@ -124,7 +126,10 @@ export class DeviceForm implements OnInit {
     install_date: [null as Date | null, Validators.required],
   });
 
+  private company = this.authService.getCompany();
+
   ngOnInit(): void {
+    console.log('company: ', this.company);
     this.formAssignment.controls.enterprise_id.valueChanges
       .pipe(
         tap(() => this.resetCatalogs()),
@@ -140,7 +145,6 @@ export class DeviceForm implements OnInit {
         this.selectedSensors.set(new Set());
         this.loadSensorsFor(id);
       });
-
     this.loadEnterprises();
   }
 
@@ -175,6 +179,11 @@ export class DeviceForm implements OnInit {
       .subscribe({
         next: (res) => {
           this.enterprises.set(this.utils.getResponseGeneral(res) ?? []);
+          const compannySelected = this.enterprises().find((e) => e.id === this.company?.id);
+          this.formAssignment.patchValue({
+            enterprise_id: compannySelected,
+          });
+
           if (this.deviceVehicleId) this.loadAssignment(this.deviceVehicleId);
         },
         error: () => this.ui.error('No se pudieron recuperar las empresas.'),

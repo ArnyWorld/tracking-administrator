@@ -21,6 +21,7 @@ import { CompanyService as CompanyByUserService } from '../../services/company/c
 import { CompanyService } from '../../../users/services/company/company.service';
 import { Device } from '../../models/device.interface';
 import { Enterprise } from '../../../users/models/userResponse.interface';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-device-form',
@@ -51,6 +52,8 @@ export class DeviceForm implements OnInit {
   private dbService = inject(DatabasesService);
   private searchDevice$ = new Subject<string>();
   private enterpriseService = inject(CompanyService);
+  private authService = inject(AuthService);
+  private company = this.authService.getCompany();
 
   formDevice: FormGroup;
   dbArray: any;
@@ -100,7 +103,6 @@ export class DeviceForm implements OnInit {
     this.deviceService.findDeviceById(this.idDevice!).subscribe({
       next: (data) => {
         this.deviceRecovered = this.utilsService.getResponseGeneral(data)[0];
-        console.log(this.deviceRecovered);
         this.formDevice.patchValue({
           info_brand: this.deviceRecovered?.info_brand,
           info_model: this.deviceRecovered?.info_model,
@@ -128,7 +130,6 @@ export class DeviceForm implements OnInit {
         const db = this.arrayEnterprises.find((enterprise) => enterprise?.id == selectedId);
         this.dbSelected = db?.databases[0]?.codename;
         this.enterpriseSelected = db;
-        console.log(this.dbSelected);
       }
     });
   };
@@ -139,7 +140,6 @@ export class DeviceForm implements OnInit {
       next: (data) => {
         this.dbArray = this.utilsService.getResponseGeneral(data) ?? [];
         this.isLoadingDatabases.set(false);
-        console.log(this.dbArray);
       },
       error: () => {
         this.messageService.error('No se pudieron recuperar las bases de datos.');
@@ -154,7 +154,10 @@ export class DeviceForm implements OnInit {
       next: (data) => {
         this.arrayEnterprises = this.utilsService.getResponseGeneral(data) ?? [];
         this.isLoadingEnterprises.set(false);
-        console.log(this.arrayEnterprises);
+        const companySelected = this.arrayEnterprises.find((e) => e.id === this.company?.id);
+        this.formDevice.patchValue({
+          enterprise_id: companySelected?.id,
+        });
       },
       error: () => {
         this.messageService.error('No se pudieron recuperar las bases de datos.');
@@ -282,7 +285,6 @@ export class DeviceForm implements OnInit {
     this.deviceService.register(this.formDevice.value, this.dbSelected).subscribe({
       next: (data) => {
         this.messageService.success('Se registró correctamente el dispositivo.');
-        console.log('saved device: ', data);
         this.saveDeviceInEnterprise(data?.content);
         this.saveDeviceWithTimeZone();
       },
@@ -304,8 +306,6 @@ export class DeviceForm implements OnInit {
           this.messageService.success(
             'Se registró correctamente el dispositivo en la empresa seleccionada.',
           );
-          console.log('saved device in enterprise: ', res);
-
           this.router.navigate(['/app/device/list']);
         },
 
@@ -342,7 +342,6 @@ export class DeviceForm implements OnInit {
         this.messageService.success(
           'Se registró correctamente el dispositivo con su zona horaria.',
         );
-        console.log('saved device: ', data);
       },
 
       error: () => {
